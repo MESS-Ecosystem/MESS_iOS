@@ -9,21 +9,31 @@ import SwiftUI
 
 struct ChatView: View {
     // @StateObject var socket = RawWebSocketManager()
-    @StateObject var socket = WebSocketManager(socketUrl: "http://192.168.1.20:8080")
+    var socketURL: String
+    var username: String
+//    @StateObject var socket = WebSocketManager(socketUrl: "http://192.168.90.144:8080/")
+    @StateObject var socket: BroadcastWebSocketManager
+    
     @State private var messageInput = ""
     @State private var keyboardHeight: CGFloat = 0
     // @State public var isConnected: Bool = false
     @FocusState private var focus: Bool
-    var username: String
-    
     var messageArray = ["Hi There !!", "How you're doin",  "Im glad, we could talk to you on a Private Server, where no one could read our conversations directly"]
+    
+    init(socketURL: String, username: String) {
+        self.socketURL = socketURL
+        self.username = username
+        
+        _socket = StateObject(wrappedValue: BroadcastWebSocketManager(socketUrl: socketURL))
+        
+    }
+    
+    
     var body: some View {
         VStack(alignment: .center) {
             ScrollView{
                 ForEach(messageArray, id: \.self) { text in
                     MessageBubble(message: Message(id: "12345", message: text, isSent: true, timeStamp: Date()))
-                    MessageBubble(message: Message(id: "12345", message: text, isSent: false, timeStamp: Date()))
-                    MessageBubble(message: Message(id: "12345", message: text, isSent: false, timeStamp: Date()))
                 }
             }
             // .clipped()
@@ -48,6 +58,7 @@ struct ChatView: View {
                         HStack{
                             Button(action: {
                                 socket.connect()
+                                print("socket connection sent")
                             }){
                                 Image(systemName: socket.isConnected ? "link.circle.fill" : "link")
                                     .padding()
@@ -55,7 +66,7 @@ struct ChatView: View {
                                     .clipShape(.capsule)
                             }
                             Button(action: {
-                                socket.send(message: "Hello from iOS implementation of MESS app")
+                                socket.send(message: messageInput)
                             }) {
                                 Image(systemName: "paperplane.fill")
                                     .padding()
@@ -105,5 +116,5 @@ struct ChatView: View {
 }
 
 #Preview {
-    ChatView(username: "Hideo Kojima")
+    ChatView(socketURL: "http://localhost:8080",username: "Hideo Kojima")
 }

@@ -21,7 +21,7 @@ struct Landing: View {
                     }
                 }
             
-            ChatView(username: "Broadcast")
+            ChatView(socketURL: "", username: "Broadcast")
                 .padding(.bottom, 1)
                 .background(Color("Background"))
                 .tabItem{

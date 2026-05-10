@@ -8,7 +8,7 @@
 import Foundation
 import SocketIO
 
-class WebSocketManager: ObservableObject {
+class BroadcastWebSocketManager: ObservableObject {
     
     @Published var isConnected: Bool = false
     var manager: SocketManager!
@@ -48,7 +48,7 @@ class WebSocketManager: ObservableObject {
 
         socket.on(clientEvent: .connect) { [weak self] data, ack in
             print("Connected to server")
-//            isConnected = true
+            self?.isConnected = true
             
             DispatchQueue.main.async {
                 self?.isConnected = true
@@ -57,14 +57,14 @@ class WebSocketManager: ObservableObject {
 
         socket.on(clientEvent: .disconnect) { [weak self] data, ack in
             print("Disconnected")
-//            isConnected = false
+            self?.isConnected = false
             
             DispatchQueue.main.async {
                 self?.isConnected = false
             }
         }
 
-        socket.on("message") { data, ack in
+        socket.on("recieve-new-message") { data, ack in
             print("Message received:", data)
         }
     }

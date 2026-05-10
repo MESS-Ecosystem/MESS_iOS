@@ -15,6 +15,7 @@ struct ContentView: View {
     private var isIpad: Bool {
         UIDevice.current.userInterfaceIdiom == .pad
     }
+    @State private var isNoURi: Bool = false
     private var shouldUseSidebar: Bool {
         isIpad && horizontalSizeClass == .regular
     }
@@ -28,10 +29,6 @@ struct ContentView: View {
     
     var body: some View {
         ZStack {
-//            Image("Background")
-            Color("Background")
-                .ignoresSafeArea(.all)
-                .frame(width: .infinity, height: .infinity)
             Group {
                 if #available(iOS 16, *) {
                     modernNavigation
@@ -132,6 +129,12 @@ private extension ContentView {
                 } label: {
                     Image(systemName: "link")
                 }
+                .alert("Important Message", isPresented: $isNoURi) {
+                    Button("Enter URi", role: .cancel) { showingAlert = true; isNoURi = false }
+                           Button("Cancel", role: .destructive) { isNoURi = false }
+                       } message: {
+                           Text("Please enter a URi to connect to server")
+                       }
                 .padding()
                 .background(.ultraThinMaterial)
                 .clipShape(.capsule)
@@ -142,6 +145,12 @@ private extension ContentView {
                 } label: {
                     Image(systemName: "link")
                 }
+                .alert("Important Message", isPresented: $isNoURi) {
+                    Button("Enter URi", role: .cancel) { showingAlert = true; isNoURi = false }
+                           Button("Cancel", role: .destructive) { isNoURi = false }
+                       } message: {
+                           Text("Please enter a URi to connect to server")
+                       }
                 .padding()
                 .background(.ultraThinMaterial)
                 .clipShape(.capsule)
@@ -153,7 +162,7 @@ private extension ContentView {
     var staticPreviewChat: some View {
         
         NavigationLink {
-            ChatView(username: "Fragile")
+            ChatView(socketURL: inputText, username: "Fragile")
         } label: {
             TitleRow(
                 username: "Fragile",
@@ -175,9 +184,7 @@ private extension ContentView {
 private extension ContentView {
     func userRow(_ user: UserList) -> some View {
         NavigationLink {
-            ChatView(
-                username: user.username
-            )
+            ChatView(socketURL: inputText,username: user.username)
         } label: {
             TitleRow(
                 username: user.username,
@@ -203,8 +210,13 @@ extension ContentView {
         }
     }
     func fetchUsers() async throws -> [UserList] {
+        
+        if inputText == "" {
+            isNoURi = true
+        }
+        let dmUserURL = inputText + "/dmusers"
         guard let url = URL(
-            string: inputText
+            string: dmUserURL
         ) else {
             throw URLError(.badURL)
         }

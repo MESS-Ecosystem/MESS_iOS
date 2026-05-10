@@ -18,13 +18,14 @@
 		176AF7F42F9FDF2200F1999D /* MESSTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 176AF7F32F9FDF2200F1999D /* MESSTests.swift */; };
 		176AF7FE2F9FDF2200F1999D /* MESSUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 176AF7FD2F9FDF2200F1999D /* MESSUITests.swift */; };
 		176AF8002F9FDF2200F1999D /* MESSUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 176AF7FF2F9FDF2200F1999D /* MESSUITestsLaunchTests.swift */; };
-		176C60952FAB37FB000CAF5F /* SocketManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 176C60942FAB37FB000CAF5F /* SocketManager.swift */; };
+		176C60952FAB37FB000CAF5F /* BroadcastSocketManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 176C60942FAB37FB000CAF5F /* BroadcastSocketManager.swift */; };
 		1785FCAF2FA07BBB00F536E9 /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 1785FCAE2FA07BBB00F536E9 /* .gitignore */; };
 		1785FCB52FA0917100F536E9 /* TitleRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1785FCB42FA0917100F536E9 /* TitleRow.swift */; };
 		178CA9222FA373E000F4E529 /* MessageField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 178CA9212FA373E000F4E529 /* MessageField.swift */; };
 		178CA9242FA37A3500F4E529 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 178CA9232FA37A3500F4E529 /* Extensions.swift */; };
 		17AE53412FADE31500E592D0 /* MessageTitleRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17AE53402FADE31500E592D0 /* MessageTitleRow.swift */; };
 		17D753E92FAD020100942CD8 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17D753E82FAD020100942CD8 /* ContentView.swift */; };
+		17FA527D2FB0D87200A25CCC /* DMSocketManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17FA527C2FB0D87200A25CCC /* DMSocketManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -58,13 +59,14 @@
 		176AF7F92F9FDF2200F1999D /* MESSUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MESSUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		176AF7FD2F9FDF2200F1999D /* MESSUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MESSUITests.swift; sourceTree = "<group>"; };
 		176AF7FF2F9FDF2200F1999D /* MESSUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MESSUITestsLaunchTests.swift; sourceTree = "<group>"; };
-		176C60942FAB37FB000CAF5F /* SocketManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocketManager.swift; sourceTree = "<group>"; };
+		176C60942FAB37FB000CAF5F /* BroadcastSocketManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BroadcastSocketManager.swift; sourceTree = "<group>"; };
 		1785FCAE2FA07BBB00F536E9 /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 		1785FCB42FA0917100F536E9 /* TitleRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleRow.swift; sourceTree = "<group>"; };
 		178CA9212FA373E000F4E529 /* MessageField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageField.swift; sourceTree = "<group>"; };
 		178CA9232FA37A3500F4E529 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		17AE53402FADE31500E592D0 /* MessageTitleRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageTitleRow.swift; sourceTree = "<group>"; };
 		17D753E82FAD020100942CD8 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		17FA527C2FB0D87200A25CCC /* DMSocketManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DMSocketManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -123,7 +125,8 @@
 				175EB6D52FAF342C00D6E78E /* Landing.swift */,
 				17D753E82FAD020100942CD8 /* ContentView.swift */,
 				176AF7E42F9FDF1F00F1999D /* ChatView.swift */,
-				176C60942FAB37FB000CAF5F /* SocketManager.swift */,
+				176C60942FAB37FB000CAF5F /* BroadcastSocketManager.swift */,
+				17FA527C2FB0D87200A25CCC /* DMSocketManager.swift */,
 				175D1F892FA3672F0054C52E /* Models */,
 				1785FCB12FA0913200F536E9 /* Components */,
 				176AF7E62F9FDF2100F1999D /* Assets.xcassets */,
@@ -293,9 +296,10 @@
 				175D1F882FA364810054C52E /* MessageBubble.swift in Sources */,
 				178CA9242FA37A3500F4E529 /* Extensions.swift in Sources */,
 				175EB6D62FAF342C00D6E78E /* Landing.swift in Sources */,
-				176C60952FAB37FB000CAF5F /* SocketManager.swift in Sources */,
+				176C60952FAB37FB000CAF5F /* BroadcastSocketManager.swift in Sources */,
 				178CA9222FA373E000F4E529 /* MessageField.swift in Sources */,
 				17D753E92FAD020100942CD8 /* ContentView.swift in Sources */,
+				17FA527D2FB0D87200A25CCC /* DMSocketManager.swift in Sources */,
 				175D1F8B2FA367440054C52E /* Message.swift in Sources */,
 				176AF7E32F9FDF1F00F1999D /* MESSApp.swift in Sources */,
 				1785FCB52FA0917100F536E9 /* TitleRow.swift in Sources */,
