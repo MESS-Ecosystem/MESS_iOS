@@ -8,21 +8,17 @@
 import SwiftUI
 
 extension ContentView {
-
     public var connectionSheet: some View {
-
         NavigationView {
-
             VStack(alignment: .center, spacing: 20) {
-
                 Text("Enter Server URI")
                     .font(.title2)
                     .bold()
-
                 TextField(
                     "Socket URI",
                     text: $inputText
                 )
+                
                 .foregroundStyle(.white)
                 .padding()
                 .background(.ultraThinMaterial)
@@ -38,15 +34,13 @@ extension ContentView {
                 .foregroundColor(.white)
                 .clipShape(.capsule)
                 .padding(.horizontal)
-
 //                Spacer()
-
             }
             .padding()
             .navigationTitle("Connect")
             .navigationBarTitleDisplayMode(.inline)
-
         }
+        .background(.ultraThinMaterial)
 
     }
 

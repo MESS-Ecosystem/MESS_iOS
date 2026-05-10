@@ -11,27 +11,33 @@ struct ContentView: View {
     @Environment(\.horizontalSizeClass)
     private var horizontalSizeClass
     // MARK: - Device Checks
-
+    
     private var isIpad: Bool {
         UIDevice.current.userInterfaceIdiom == .pad
     }
     private var shouldUseSidebar: Bool {
         isIpad && horizontalSizeClass == .regular
     }
-
+    
     // MARK: - State
     @State private var users: [UserList] = []
     @State public var showingAlert = false
     @State public var inputText = ""
-
+    
     // MARK: - Body
-
+    
     var body: some View {
-        Group {
-            if #available(iOS 16, *) {
-                modernNavigation
-            } else {
-                legacyNavigation
+        ZStack {
+//            Image("Background")
+            Color("Background")
+                .ignoresSafeArea(.all)
+                .frame(width: .infinity, height: .infinity)
+            Group {
+                if #available(iOS 16, *) {
+                    modernNavigation
+                } else {
+                    legacyNavigation
+                }
             }
         }
     }
@@ -68,8 +74,9 @@ private extension ContentView {
     var legacyNavigation: some View {
         NavigationView {
             chatList
-                .navigationBarBackButtonHidden(isIpad)
+//                .navigationBarBackButtonHidden(true)
         }
+        .navigationViewStyle(.columns)
     }
 }
 
@@ -82,48 +89,69 @@ private extension ContentView {
             usersSection
         }
         .navigationTitle("Chats")
+        .background(Color("Background"))
     }
 }
 // MARK: - Components
 private extension ContentView {
     var connectionButton: some View {
-        Button("Enter URi for Socket") {
-            showingAlert = true
+        HStack{
+            if #available(iOS 26.0, *) {
+                Button("Enter URi for Socket") {
+                    showingAlert = true
+                }
+                .sheet(isPresented: $showingAlert) {
+                    connectionSheet
+                        .background(Color("Background"))
+                }
+                .padding()
+                .background(.ultraThinMaterial)
+                .foregroundStyle(
+                    Color("ThemedText")
+                )
+                .clipShape(.capsule)
+                .glassEffect(.regular.interactive(), in: .capsule)
+            } else {
+                Button("Enter URi for Socket") {
+                    showingAlert = true
+                }
+                .sheet(isPresented: $showingAlert) {
+                    connectionSheet
+                        .background(Color("Background"))
+                }
+                .padding()
+                .background(.ultraThinMaterial)
+                .foregroundStyle(
+                    Color("ThemedText")
+                )
+                .clipShape(.capsule)
+            }
+            if #available(iOS 26.0, *) {
+                Button {
+                    connectToServer()
+                } label: {
+                    Image(systemName: "link")
+                }
+                .padding()
+                .background(.ultraThinMaterial)
+                .clipShape(.capsule)
+                .glassEffect(.regular.interactive(), in: .capsule)
+            } else {
+                Button {
+                    connectToServer()
+                } label: {
+                    Image(systemName: "link")
+                }
+                .padding()
+                .background(.ultraThinMaterial)
+                .clipShape(.capsule)
+            }
+            
         }
-//        .alert(
-//            "Enter URi",
-//            isPresented: $showingAlert
-//        ) {
-//            TextField(
-//                "Socket URi",
-//                text: $inputText
-//            )
-//            Button("Connect") {
-//                connectToServer()
-//            }
-//            Button(
-//                "Cancel",
-//                role: .cancel
-//            ) {}
-//
-//        } message: {
-//            Text(
-//                "Please enter server's socket URi below."
-//            )
-//        }
-        .sheet(isPresented: $showingAlert) {
-            connectionSheet
-        }
-        .padding()
-        .background(.ultraThinMaterial)
-        .clipShape(.capsule)
-        .foregroundStyle(
-            Color("ThemedText")
-        )
     }
-
+    
     var staticPreviewChat: some View {
-
+        
         NavigationLink {
             ChatView(username: "Fragile")
         } label: {
@@ -183,6 +211,15 @@ extension ContentView {
         let (data, _) = try await URLSession
             .shared
             .data(from: url)
+        if let jsonString = String(data: data, encoding: .utf8) {
+            print("Raw JSON String: \(jsonString)")
+        }
+        let jsondata = try JSONDecoder()
+            .decode(
+                [UserList].self,
+                from: data
+            )
+        print("recieved data: ", jsondata)
         return try JSONDecoder()
             .decode(
                 [UserList].self,
@@ -193,7 +230,11 @@ extension ContentView {
 // MARK: - Models
 struct UserList: Identifiable, Codable {
     let id: String
-    let userId: String?
+    let userId: UserDetails?
+    let username: String
+}
+struct UserDetails: Codable {
+    let platformInfo: String
     let username: String
 }
 
