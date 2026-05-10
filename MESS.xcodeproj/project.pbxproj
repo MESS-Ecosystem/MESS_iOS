@@ -7,9 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		173EDBA22FB057BE00CD93D4 /* SheetExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 173EDBA12FB057BE00CD93D4 /* SheetExtension.swift */; };
 		173F96C42FADC30F00583652 /* SocketIO in Frameworks */ = {isa = PBXBuildFile; productRef = 173F96C32FADC30F00583652 /* SocketIO */; };
 		175D1F882FA364810054C52E /* MessageBubble.swift in Sources */ = {isa = PBXBuildFile; fileRef = 175D1F872FA364810054C52E /* MessageBubble.swift */; };
 		175D1F8B2FA367440054C52E /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 175D1F8A2FA367440054C52E /* Message.swift */; };
+		175EB6D62FAF342C00D6E78E /* Landing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 175EB6D52FAF342C00D6E78E /* Landing.swift */; };
 		176AF7E32F9FDF1F00F1999D /* MESSApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 176AF7E22F9FDF1F00F1999D /* MESSApp.swift */; };
 		176AF7E52F9FDF1F00F1999D /* ChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 176AF7E42F9FDF1F00F1999D /* ChatView.swift */; };
 		176AF7E72F9FDF2100F1999D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 176AF7E62F9FDF2100F1999D /* Assets.xcassets */; };
@@ -43,8 +45,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		173EDBA12FB057BE00CD93D4 /* SheetExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SheetExtension.swift; path = MESS/SheetExtension.swift; sourceTree = SOURCE_ROOT; };
 		175D1F872FA364810054C52E /* MessageBubble.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageBubble.swift; sourceTree = "<group>"; };
 		175D1F8A2FA367440054C52E /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
+		175EB6D52FAF342C00D6E78E /* Landing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Landing.swift; sourceTree = "<group>"; };
 		176AF7DF2F9FDF1F00F1999D /* MESS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MESS.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		176AF7E22F9FDF1F00F1999D /* MESSApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MESSApp.swift; sourceTree = "<group>"; };
 		176AF7E42F9FDF1F00F1999D /* ChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatView.swift; sourceTree = "<group>"; };
@@ -116,6 +120,7 @@
 			isa = PBXGroup;
 			children = (
 				176AF7E22F9FDF1F00F1999D /* MESSApp.swift */,
+				175EB6D52FAF342C00D6E78E /* Landing.swift */,
 				17D753E82FAD020100942CD8 /* ContentView.swift */,
 				176AF7E42F9FDF1F00F1999D /* ChatView.swift */,
 				176C60942FAB37FB000CAF5F /* SocketManager.swift */,
@@ -123,6 +128,7 @@
 				1785FCB12FA0913200F536E9 /* Components */,
 				176AF7E62F9FDF2100F1999D /* Assets.xcassets */,
 				178CA9232FA37A3500F4E529 /* Extensions.swift */,
+				173EDBA12FB057BE00CD93D4 /* SheetExtension.swift */,
 			);
 			path = MESS;
 			sourceTree = "<group>";
@@ -283,8 +289,10 @@
 			isa = PBXSourcesBuildPhase;
 			files = (
 				176AF7E52F9FDF1F00F1999D /* ChatView.swift in Sources */,
+				173EDBA22FB057BE00CD93D4 /* SheetExtension.swift in Sources */,
 				175D1F882FA364810054C52E /* MessageBubble.swift in Sources */,
 				178CA9242FA37A3500F4E529 /* Extensions.swift in Sources */,
+				175EB6D62FAF342C00D6E78E /* Landing.swift in Sources */,
 				176C60952FAB37FB000CAF5F /* SocketManager.swift in Sources */,
 				178CA9222FA373E000F4E529 /* MessageField.swift in Sources */,
 				17D753E92FAD020100942CD8 /* ContentView.swift in Sources */,
@@ -463,7 +471,7 @@
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UIStatusBarStyle = "";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -503,7 +511,7 @@
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UIStatusBarStyle = "";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -531,7 +539,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = kaducodes.MESSTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -549,7 +557,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = kaducodes.MESSTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -566,6 +574,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = kaducodes.MESSUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -582,6 +591,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = kaducodes.MESSUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";

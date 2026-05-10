@@ -9,7 +9,7 @@ import SwiftUI
 
 struct ChatView: View {
     // @StateObject var socket = RawWebSocketManager()
-    @StateObject var socket = WebSocketManager()
+    @StateObject var socket = WebSocketManager(socketUrl: "http://192.168.1.20:8080")
     @State private var messageInput = ""
     @State private var keyboardHeight: CGFloat = 0
     // @State public var isConnected: Bool = false

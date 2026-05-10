@@ -11,14 +11,12 @@ import SocketIO
 class WebSocketManager: ObservableObject {
     
     @Published var isConnected: Bool = false
-
     var manager: SocketManager!
     var socket: SocketIOClient!
 
-    init() {
-
+    init(socketUrl: String) {
         manager = SocketManager(
-            socketURL: URL(string: "http://192.168.205.195:8080")!,
+            socketURL: URL(string: socketUrl)!,
             config: [
                 .log(true),
                 .compress,
