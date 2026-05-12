@@ -13,10 +13,11 @@ class DMWebSocketManager: ObservableObject {
     @Published var isConnected: Bool = false
     var manager: SocketManager!
     var socket: SocketIOClient!
-
+    var DMSocketUrl: String
     init(socketUrl: String) {
+        self.DMSocketUrl = socketUrl + "/DM"
         manager = SocketManager(
-            socketURL: URL(string: socketUrl + "/DM")!,
+            socketURL: URL(string: DMSocketUrl)!,
             config: [
                 .log(true),
                 .compress,
@@ -30,6 +31,7 @@ class DMWebSocketManager: ObservableObject {
     }
 
     func connect() {
+        print("connecting /DM namespace to: ", DMSocketUrl)
         socket.connect()
     }
 

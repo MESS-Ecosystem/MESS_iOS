@@ -163,7 +163,7 @@ private extension DMContentView {
     var staticPreviewChat: some View {
         
         NavigationLink {
-            ChatView(socketURL: inputText, username: "Fragile")
+            ChatView(socketURL: inputText + "/DM", username: "Fragile")
         } label: {
             TitleRow(
                 username: "Fragile",
@@ -185,7 +185,7 @@ private extension DMContentView {
 private extension DMContentView {
     func userRow(_ user: UserList) -> some View {
         NavigationLink {
-            ChatView(socketURL: inputText,username: user.username)
+            ChatView(socketURL: inputText + "/DM",username: user.username)
         } label: {
             TitleRow(
                 username: user.username,

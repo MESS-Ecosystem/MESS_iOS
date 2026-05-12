@@ -10,7 +10,7 @@ import UIKit
 struct BroadcastContentView: View {
     var body: some View {
         NavigationView{
-            BroadcastChatView(socketURL: "http://localhost:8080", username: UIDevice.current.name)
+            BroadcastChatView(socketURL: "http://", username: UIDevice.current.name)
                 .navigationTitle("Broadcast")
                 .navigationBarTitleDisplayMode(.inline)
         }

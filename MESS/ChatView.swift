@@ -88,7 +88,7 @@ struct ChatView: View {
             .background(Color("Background"))
         }
         .onAppear {
-            KeyboardObserver()
+//            KeyboardObserver()
         }
         .ignoresSafeArea(edges: .bottom) // for keeping the experience more better
         .background(Color("Background"))

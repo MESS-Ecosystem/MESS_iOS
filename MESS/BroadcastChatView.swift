@@ -50,7 +50,8 @@ struct BroadcastChatView: View {
         VStack(alignment: .center) {
             ScrollView{
                 ForEach(socket.messageArray, id: \.self) { message in
-                    BroadcastMessageBubble(message: Message(id: message.id ?? "1648255", message: message.message, isSent: message.isSent, timeStamp: Date()), displayName: message.displayName)
+                    BroadcastMessageBubble(message: Message(id: message.id ?? "1648255", message: message.message, isSent: message.isSent, timeStamp: Date()), displayName: message.displayName
+                    )
                 }
             }
             
@@ -89,7 +90,7 @@ struct BroadcastChatView: View {
                     VStack {
                         HStack{
                             Button(action: {
-                                if SocketURL == "http://localhost:8080" {
+                                if SocketURL == "http://" {
                                     showingAlert = true
                                     alertFocus = true
                                 }
@@ -145,7 +146,7 @@ struct BroadcastChatView: View {
         }
         .onAppear {
             socket.connect(to: SocketURL)
-            KeyboardObserver()
+//            KeyboardObserver()
         }
         .ignoresSafeArea(edges: .bottom) // for keeping the experience more better
         .background(Color("Background"))
