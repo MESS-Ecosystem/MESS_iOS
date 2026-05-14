@@ -6,13 +6,19 @@
 //
 
 import SwiftUI
-
+import Foundation
 struct Landing: View {
+    @State public var status: StatusPing = StatusPing(
+        status: "0", databaseState: "disconnected"
+    )
+    private var isIpad: Bool {
+        UIDevice.current.userInterfaceIdiom == .pad
+    }
     var body: some View {
         TabView{
             DMContentView()
                 .padding(.bottom, 1)
-                .background(Color("Background"))
+                .background(isIpad ? Color.clear : Color("Background"))
                 .tabItem {
                     Label {
                         Text("DM")
@@ -38,6 +44,13 @@ struct Landing: View {
             Color.clear.frame(height: 20) // Effectively adds "padding" to the bottom safe area
         }
         .ignoresSafeArea(edges: .top)
+        .task {
+            do {
+                status = try await pingServer()
+            } catch {
+                print(error)
+            }
+        }
         
         
         
@@ -72,9 +85,38 @@ struct Landing: View {
         //            }
         
     }
+    struct StatusPing: Codable {
+        var status: String
+        var databaseState: String
+    }
+    func pingServer() async throws -> StatusPing {
+        print("confirming server status !")
+        let serverURL = "https://mess-backend-qseb.onrender.com/"
+        guard let url = URL(
+            string: serverURL
+        ) else {
+            throw URLError(.badURL)
+        }
+        let (data, _) = try await URLSession
+            .shared
+            .data(from: url)
+        if let jsonString = String(data: data, encoding: .utf8) {
+            print("Raw JSON String: \(jsonString)")
+        }
+        let jsondata = try JSONDecoder()
+            .decode(
+                StatusPing.self,
+                from: data
+            )
+        print("Status: ", jsondata)
+        return try JSONDecoder()
+            .decode(
+                StatusPing.self,
+                from: data
+            )
+    }
 }
 
 #Preview {
     Landing()
-        .background(Color("Background"))
 }

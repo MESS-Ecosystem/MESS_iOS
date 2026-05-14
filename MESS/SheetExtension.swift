@@ -71,7 +71,7 @@ extension BroadcastChatView {
                 .clipShape(.capsule)
                 .padding(.horizontal)
                 Button("Connect") {
-                    socket.connect(to: socketURL)
+                    socket.connect(to: SocketURL)
                     showingAlert = false
                 }
                 .padding()

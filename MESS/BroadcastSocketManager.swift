@@ -22,7 +22,7 @@ class BroadcastWebSocketManager: ObservableObject {
 //        var message: String
 //        var isSent: Bool
 //    }
-    @Published var messageArray: [MessageArray] = [
+    @Published var broadcastMessageArray: [MessageArray] = [
         MessageArray(
             id: "65487213",
             message: "Hello iOS!!",
@@ -46,6 +46,7 @@ class BroadcastWebSocketManager: ObservableObject {
                 .log(true),
                 .compress,
                 .forceWebsockets(true),
+                .connectParams(["platformInfo": UIDevice.current.name])
             ]
         )
 
@@ -102,7 +103,7 @@ class BroadcastWebSocketManager: ObservableObject {
                     from: jsonData
                 )
                 DispatchQueue.main.async {
-                    self.messageArray.append(decoded)
+                    self.broadcastMessageArray.append(decoded)
                 }
             } catch {
                 print(error)

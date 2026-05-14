@@ -17,7 +17,6 @@ import SwiftUI
 
 struct BroadcastChatView: View {
     // @StateObject var socket = RawWebSocketManager()
-    var socketURL: String
     var username: String
     //    @StateObject var socket = WebSocketManager(socketUrl: "http://192.168.90.144:8080/")
     @StateObject var socket: BroadcastWebSocketManager
@@ -28,7 +27,7 @@ struct BroadcastChatView: View {
     @FocusState private var focus: Bool
     @State public var showingAlert = false
     @FocusState private var alertFocus: Bool
-    @State public var SocketURL: String = "http://"
+    @State public var SocketURL: String = "https://mess-backend-qseb.onrender.com"
 //    var messageArray = ["Hi There !!", "How you're doin",  "Im glad, we could talk to you on a Private Server, where no one could read our conversations directly"]
 //    struct MessageArray : Identifiable, Codable, Hashable {
 //        var id: String
@@ -37,11 +36,10 @@ struct BroadcastChatView: View {
 //    }
 //    var messageArray: [MessageArray] = [["id": "2349987", "message": "Hello iOS", "IsSent": false], ["id": "2349987", "message": "Hello webclient", "IsSent": true]]
     
-    init(socketURL: String, username: String) {
-        self.socketURL = socketURL
+    init(username: String) {
+        let url = "https://mess-backend-qseb.onrender.com"
         self.username = username
-        
-        _socket = StateObject(wrappedValue: BroadcastWebSocketManager(socketUrl: socketURL, username: username))
+        _socket = StateObject(wrappedValue: BroadcastWebSocketManager(socketUrl: url, username: username))
         
     }
     
@@ -49,7 +47,7 @@ struct BroadcastChatView: View {
     var body: some View {
         VStack(alignment: .center) {
             ScrollView{
-                ForEach(socket.messageArray, id: \.self) { message in
+                ForEach(socket.broadcastMessageArray, id: \.self) { message in
                     BroadcastMessageBubble(message: Message(id: message.id ?? "1648255", message: message.message, isSent: message.isSent, timeStamp: Date()), displayName: message.displayName
                     )
                 }
@@ -77,7 +75,7 @@ struct BroadcastChatView: View {
                             // the same code from below (on button click)
                             socket.send(message: messageInput)
                             // manually rendering messages sent from device
-                            socket.messageArray.append(
+                            socket.broadcastMessageArray.append(
                                 MessageArray(
                                     id: "98741265",
                                     message: messageInput,
@@ -107,6 +105,12 @@ struct BroadcastChatView: View {
                                     .clipShape(.capsule)
                                     .foregroundStyle(socket.isConnected ? .blue : .gray)
                             }
+                            .simultaneousGesture(
+                                LongPressGesture(minimumDuration: 0.1).onEnded{ _ in
+                                    showingAlert = true
+                                    alertFocus = true
+                                }
+                            )
                             .sheet(isPresented: $showingAlert) {
                                 connectionSheet
                                     .background(Color("Background"))
@@ -114,7 +118,7 @@ struct BroadcastChatView: View {
                             Button(action: {
                                 socket.send(message: messageInput)
                                 // manually rendering messages sent from device
-                                socket.messageArray.append(
+                                socket.broadcastMessageArray.append(
                                     MessageArray(
                                         id: "98741265",
                                         message: messageInput,
@@ -174,5 +178,5 @@ struct BroadcastChatView: View {
 }
 
 #Preview {
-    BroadcastChatView(socketURL: "http://localhost:8080",username: "Hideo Kojima")
+    BroadcastChatView(username: "Hideo Kojima")
 }

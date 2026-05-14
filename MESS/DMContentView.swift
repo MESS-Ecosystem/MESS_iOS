@@ -62,7 +62,7 @@ private extension DMContentView {
                 }
             }
         }
-        .background(Color("Background"))
+//        .background(Color("Background"))
     }
 }
 
