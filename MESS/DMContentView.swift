@@ -21,9 +21,9 @@ struct DMContentView: View {
     }
     
     // MARK: - State
-    @State private var users: [UserList] = []
+    @State private var users: [UserList?] = []
     @State public var showingAlert = false
-    @State public var inputText = "http://"
+    @State public var inputText = "https://mess-backend-qseb.onrender.com"
     
     // MARK: - Body
     
@@ -163,11 +163,11 @@ private extension DMContentView {
     var staticPreviewChat: some View {
         
         NavigationLink {
-            ChatView(socketURL: inputText + "/DM", username: "Fragile")
+            ChatView(socketURL: inputText, username: "Fragile")
         } label: {
             TitleRow(
                 username: "Fragile",
-                isConnected: true
+                isConnected: false
             )
             .padding(.horizontal)
             .background(.ultraThinMaterial)
@@ -175,7 +175,7 @@ private extension DMContentView {
     }
     var usersSection: some View {
         LazyVStack {
-            ForEach(users) { user in
+            ForEach(users as! [UserList]) { user in
                 userRow(user)
             }
         }
@@ -185,7 +185,7 @@ private extension DMContentView {
 private extension DMContentView {
     func userRow(_ user: UserList) -> some View {
         NavigationLink {
-            ChatView(socketURL: inputText + "/DM",username: user.username)
+            ChatView(socketURL: inputText, username: user.username)
         } label: {
             TitleRow(
                 username: user.username,
@@ -210,7 +210,7 @@ extension DMContentView {
             }
         }
     }
-    func fetchUsers() async throws -> [UserList] {
+    func fetchUsers() async throws -> [UserList?] {
         
         if inputText == "" {
             isNoURi = true

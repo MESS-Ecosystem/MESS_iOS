@@ -9,8 +9,13 @@ import SwiftUI
 
 struct TitleRow: View {
 
-    var username = "Hideo Kojima"
-    let isConnected: Bool
+    var username: String
+    @State var isConnected: Bool
+    
+    init(username: String = "Hideo Kojima", isConnected: Bool){
+        self.username = username
+        self.isConnected = isConnected
+    }
     
     var body: some View {
         HStack(spacing: 15){
@@ -24,10 +29,19 @@ struct TitleRow: View {
                     .font(.title3)
                     .bold()
                     .foregroundStyle(Color("ThemedText"))
-                Text("Online")
-                    .font(.caption)
-                    .foregroundStyle(.gray)
+                if isConnected {
+                    Text("Online")
+                        .font(.caption)
+                        .foregroundStyle(.gray)
+                        .transition(.opacity)
+                }
             }
+//            .onTapGesture {
+//                withAnimation {
+//                    isConnected.toggle() // for testing only
+//                }
+//            }
+            
             Spacer()
             ZStack{
                 Image(systemName: "phone.fill")
@@ -41,7 +55,7 @@ struct TitleRow: View {
                     Circle()
                     .fill(isConnected ? .green : Color.red.opacity(0.5))
                         .frame(width: 10, height: 10)
-                        .offset(x: 20 ,y: -20)
+                        .offset(x: 30 ,y: -30)
             }
         }
         .frame(maxWidth: .infinity, alignment: .leading)

@@ -15,7 +15,7 @@ struct BroadcastContentView: View {
         if !isIpad{
             NavigationView{
                 BroadcastChatView(username: UIDevice.current.name)
-                //                .navigationTitle("Broadcast")
+                    .navigationTitle("Broadcast")
                 //                .navigationBarTitleDisplayMode(.inline)
             }
         }

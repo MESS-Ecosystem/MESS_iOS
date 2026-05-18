@@ -12,7 +12,7 @@ struct ChatView: View {
     var socketURL: String
     var username: String
 //    @StateObject var socket = WebSocketManager(socketUrl: "http://192.168.90.144:8080/")
-    @StateObject var socket: BroadcastWebSocketManager
+    @StateObject var socket: DMWebSocketManager
     
     @State private var messageInput = ""
     @State private var keyboardHeight: CGFloat = 0
@@ -24,7 +24,7 @@ struct ChatView: View {
         self.socketURL = socketURL
         self.username = username
         
-        _socket = StateObject(wrappedValue: BroadcastWebSocketManager(socketUrl: socketURL, username: username))
+        _socket = StateObject(wrappedValue: DMWebSocketManager(socketUrl: socketURL))
         
     }
     
@@ -57,13 +57,21 @@ struct ChatView: View {
                     VStack {
                         HStack{
                             Button(action: {
-                                socket.connect(to: self.socketURL)
+                                socket.connect()
                                 print("socket connection sent")
                             }){
                                 Image(systemName: socket.isConnected ? "link.circle.fill" : "link")
                                     .padding()
                                     .background(Color("Foreground"))
                                     .clipShape(.capsule)
+                            }
+                            .alert("Error", isPresented: $socket.showAlert) {
+                                Button("Cancel", role: .destructive) {}
+                                Button("Reconnect", role: .cancel) {
+                                    socket.connect()
+                                }
+                            } message: {
+                                Text(socket.alertMessage)
                             }
                             Button(action: {
                                 socket.send(message: messageInput)
@@ -89,6 +97,7 @@ struct ChatView: View {
         }
         .onAppear {
 //            KeyboardObserver()
+            socket.connect()
         }
         .ignoresSafeArea(edges: .bottom) // for keeping the experience more better
         .background(Color("Background"))

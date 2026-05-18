@@ -115,6 +115,14 @@ struct BroadcastChatView: View {
                                 connectionSheet
                                     .background(Color("Background"))
                             }
+                            .alert("Error", isPresented: $socket.showAlert) {
+                                Button("Cancel", role: .destructive) {}
+                                Button("Reconnect", role: .cancel) {
+                                    socket.connect(to: SocketURL)
+                                }
+                            } message: {
+                                Text(socket.alertMessage)
+                            }
                             Button(action: {
                                 socket.send(message: messageInput)
                                 // manually rendering messages sent from device

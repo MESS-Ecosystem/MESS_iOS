@@ -11,6 +11,8 @@ import SocketIO
 class DMWebSocketManager: ObservableObject {
     
     @Published var isConnected: Bool = false
+    @Published var showAlert = false
+    @Published var alertMessage: String = ""
     var manager: SocketManager!
     var socket: SocketIOClient!
     var DMSocketUrl: String
@@ -56,7 +58,17 @@ class DMWebSocketManager: ObservableObject {
                 self?.isConnected = true
             }
         }
-
+        socket.on(clientEvent: .error) { [weak self] data, ack in
+            print("error: ", data)
+            if let errorData = data.first as? [String: Any],
+               let message = errorData["message"] as? String {
+                self?.alertMessage = message
+                self?.showAlert = true
+            } else {
+                self?.alertMessage = "Unknown Auto Socket Error"
+                self?.showAlert = true
+            }
+        }
         socket.on(clientEvent: .disconnect) { [weak self] data, ack in
             print("Disconnected")
             self?.isConnected = false

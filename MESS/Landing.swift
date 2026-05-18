@@ -8,6 +8,7 @@
 import SwiftUI
 import Foundation
 struct Landing: View {
+    @AppStorage("hasCompletedOnboarding") public var hasCompletedOnboarding: Bool = false
     @State public var status: StatusPing = StatusPing(
         status: "0", databaseState: "disconnected"
     )
@@ -15,44 +16,47 @@ struct Landing: View {
         UIDevice.current.userInterfaceIdiom == .pad
     }
     var body: some View {
-        TabView{
-            DMContentView()
-                .padding(.bottom, 1)
-                .background(isIpad ? Color.clear : Color("Background"))
-                .tabItem {
-                    Label {
-                        Text("DM")
-                    } icon: {
-                        Image(systemName: "message")
+        if hasCompletedOnboarding {
+            TabView{
+                DMContentView()
+                    .padding(.bottom, 1)
+                    .background(isIpad ? Color.clear : Color("Background"))
+                    .tabItem {
+                        Label {
+                            Text("DM")
+                        } icon: {
+                            Image(systemName: "message")
+                        }
                     }
-                }
-            
-//            BroadcastChatView(socketURL: "http://", username: "Broadcast")
-            BroadcastContentView()
-                .padding(.bottom, 1)
-                .background(Color("Background"))
-                .tabItem{
-                    Label {
-                        Text("Broadcast")
-                    } icon: {
-                        Image(systemName: "antenna.radiowaves.left.and.right")
+                
+                //            BroadcastChatView(socketURL: "http://", username: "Broadcast")
+                BroadcastContentView()
+                    .padding(.bottom, 1)
+                    .background(Color("Background"))
+                    .tabItem{
+                        Label {
+                            Text("Broadcast")
+                        } icon: {
+                            Image(systemName: "antenna.radiowaves.left.and.right")
+                        }
                     }
+            }
+            //        .padding(.top)
+            .safeAreaInset(edge: .bottom) {
+                Color.clear.frame(height: 20) // Effectively adds "padding" to the bottom safe area
+            }
+            .ignoresSafeArea(edges: .top)
+            .task {
+                do {
+                    status = try await pingServer()
+                } catch {
+                    print(error)
                 }
-        }
-//        .padding(.top)
-        .safeAreaInset(edge: .bottom) {
-            Color.clear.frame(height: 20) // Effectively adds "padding" to the bottom safe area
-        }
-        .ignoresSafeArea(edges: .top)
-        .task {
-            do {
-                status = try await pingServer()
-            } catch {
-                print(error)
             }
         }
-        
-        
+        else {
+            OnboardingView()
+        }
         
         //            VStack{
         //
@@ -119,4 +123,8 @@ struct Landing: View {
 
 #Preview {
     Landing()
+        .onAppear {
+            // Wipes the setting ONLY inside the preview environment canvas
+            UserDefaults.standard.set(false, forKey: "hasCompletedOnboarding")
+        }
 }
