@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1736DB212FBC6D8400634BD6 /* KeychainManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1736DB202FBC6D8000634BD6 /* KeychainManager.swift */; };
 		173EDBA22FB057BE00CD93D4 /* SheetExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 173EDBA12FB057BE00CD93D4 /* SheetExtension.swift */; };
 		173F96C42FADC30F00583652 /* SocketIO in Frameworks */ = {isa = PBXBuildFile; productRef = 173F96C32FADC30F00583652 /* SocketIO */; };
 		175D1F882FA364810054C52E /* MessageBubble.swift in Sources */ = {isa = PBXBuildFile; fileRef = 175D1F872FA364810054C52E /* MessageBubble.swift */; };
@@ -52,6 +53,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		1736DB202FBC6D8000634BD6 /* KeychainManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainManager.swift; sourceTree = "<group>"; };
 		173EDBA12FB057BE00CD93D4 /* SheetExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SheetExtension.swift; path = MESS/SheetExtension.swift; sourceTree = SOURCE_ROOT; };
 		175D1F872FA364810054C52E /* MessageBubble.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageBubble.swift; sourceTree = "<group>"; };
 		175D1F8A2FA367440054C52E /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
@@ -101,6 +103,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		1736DB1F2FBC6D6700634BD6 /* Managers */ = {
+			isa = PBXGroup;
+			children = (
+				1736DB202FBC6D8000634BD6 /* KeychainManager.swift */,
+			);
+			path = Managers;
+			sourceTree = "<group>";
+		};
 		175D1F892FA3672F0054C52E /* Models */ = {
 			isa = PBXGroup;
 			children = (
@@ -134,6 +144,7 @@
 		176AF7E12F9FDF1F00F1999D /* MESS */ = {
 			isa = PBXGroup;
 			children = (
+				1736DB1F2FBC6D6700634BD6 /* Managers */,
 				176AF7E22F9FDF1F00F1999D /* MESSApp.swift */,
 				175EB6D52FAF342C00D6E78E /* Landing.swift */,
 				17D0C6C62FB9B42B00A4C477 /* OnboardingView.swift */,
@@ -328,6 +339,7 @@
 				176AF7E32F9FDF1F00F1999D /* MESSApp.swift in Sources */,
 				1785FCB52FA0917100F536E9 /* TitleRow.swift in Sources */,
 				17AE53412FADE31500E592D0 /* MessageTitleRow.swift in Sources */,
+				1736DB212FBC6D8400634BD6 /* KeychainManager.swift in Sources */,
 			);
 		};
 		176AF7EB2F9FDF2200F1999D /* Sources */ = {

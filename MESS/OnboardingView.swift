@@ -42,337 +42,341 @@ struct OnboardingPageView: View {
     }
     
     var body: some View {
-        HStack{
-            if switchBinding==0 {
-                Text("Welcome to")
-                    .font(.largeTitle)
-                    .fontWeight(.semibold)
-                Text("MESS")
-                    .font(.largeTitle)
-                    .fontWeight(.bold)
-            } else if switchBinding==1{
-                
-                VStack{
-                    Text("Everyone Loves their own Identity")
-                        .font(.title)
-                        .fontWeight(.medium)
-                        .multilineTextAlignment(.center)
-                    Spacer()
+            HStack{
+                if switchBinding==0 {
+                    Text("Welcome to")
+                        .font(.largeTitle)
+                        .fontWeight(.semibold)
+                    Text("MESS")
+                        .font(.largeTitle)
+                        .fontWeight(.bold)
+                } else if switchBinding==1{
                     
-                    if authType == .login {
+                    VStack{
+                        Spacer()
+                        Text("Everyone Loves their own Identity")
+                            .font(.title)
+                            .fontWeight(.medium)
+                            .multilineTextAlignment(.center)
+                        Spacer()
                         
-                        VStack{
-                            HStack{
-                                Button (action: { isEmptyAccount = true }) {
-                                    Image(systemName: "person.fill")
-                                        .accentColor(.gray)
-                                }
-                                .alert("Account Manager", isPresented: $isEmptyAccount) {
-                                    
-                                    Button(action: { isEmptyAccount = false }) {
-                                        Text("Ok")
+                        if authType == .login {
+                            
+                            VStack{
+                                ZStack(alignment: .trailing){
+                                    TextField(text: $loginUsernameInput) {
+                                        Text("username")
+                                            .foregroundStyle(Color("ThemedText").opacity(0.25))
                                     }
-                                } message: {
-                                    Text("No previous Account found")
-                                }
-                                TextField(text: $loginUsernameInput) {
-                                    Text("username")
-                                        .foregroundStyle(Color("ThemedText").opacity(0.25))
-                                }
-                                .padding() // between text and border, inner spacing
-                                .background(Color("Background"))
-                                .clipShape(.capsule)
-                                .foregroundStyle(Color("ThemedText"))
-                                .textInputAutocapitalization(.never)
-                                .autocorrectionDisabled(true)
-                            }
-                            .padding(.horizontal) // outer spacing
-                            
-                            
-                            //                        SecureField(text: $passwordInput) {
-                            //                            Text("password")
-                            //                                .foregroundStyle(Color("ThemedText").opacity(0.25))
-                            //                        }
-                            HStack{
-                                if isSecured {
-                                    SecureField("Password", text: $loginPasswordInput)
-                                    //                                  .textFieldStyle(.roundedBorder)
-                                        .textContentType(.password)
-                                    //                                  .disableAutocorrection(true)
-                                        .autocorrectionDisabled(true)
-                                        .textInputAutocapitalization(.never)
-                                        .padding() // between text and border, inner spacing
-                                        .background(Color("Background"))
-                                        .clipShape(.capsule)
-                                        .foregroundStyle(Color("ThemedText"))
-                                } else {
-                                    TextField("Password", text: $loginPasswordInput)
-                                        .textContentType(.password)
-                                    //                                  .disableAutocorrection(true)
-                                        .autocorrectionDisabled(true)
-                                        .textInputAutocapitalization(.never)
-                                        .padding() // between text and border, inner spacing
-                                        .background(Color("Background"))
-                                        .clipShape(.capsule)
-                                        .foregroundStyle(Color("ThemedText"))
-                                        .onSubmit {
-                                            isLoading = true
-                                            withAnimation {
-                                                errorMessage = ""
-                                            }
-                                            login(username: loginUsernameInput, password: loginPasswordInput, errorMessage: $errorMessage, loadingController: $isLoading, loginState: $loginState)
+                                    .padding() // between text and border, inner spacing
+                                    .background(Color("Background"))
+                                    .clipShape(.capsule)
+                                    .foregroundStyle(Color("ThemedText"))
+                                    .textInputAutocapitalization(.never)
+                                    .autocorrectionDisabled(true)
+                                    Button (action: { isEmptyAccount = true }) {
+                                        Image(systemName: "person.fill")
+                                            .accentColor(.gray)
+                                    }
+                                    .alert("Account Manager", isPresented: $isEmptyAccount) {
+                                        
+                                        Button(action: { isEmptyAccount = false }) {
+                                            Text("Ok")
                                         }
-                                    
+                                    } message: {
+                                        Text("No previous Account found")
+                                    }
+                                    .padding(.horizontal)
                                 }
-                                Button(action: { withAnimation { isSecured.toggle() } }) {
-                                    Image(systemName: isSecured ? "eye.slash" : "eye")
-                                        .accentColor(.gray)
-                                }
-                            }
-                            .padding(.horizontal) // outer spacing
-                            .padding(.vertical, 10)
-                            if errorMessage != "" {
-                                Text(errorMessage)
-                                    .foregroundStyle(.red)
-                                    .transition(.opacity)
-                            }
-                            //                        Button("Login", systemImage: "lock", role: .none) {
-                            //                            ProgressView {
-                            //                                Text("Login")
-                            //                            }
-                            //                            withAnimation {
-                            //                                errorMessage = ""
-                            //                            }
-                            //                            login(username: usernameInput, password: passwordInput, errorMessage: $errorMessage)
-                            //                        }
-                            Button(action: {
-                                isLoading = true
-                                withAnimation {
-                                    errorMessage = ""
-                                }
-                                login(username: loginUsernameInput, password: loginPasswordInput, errorMessage: $errorMessage, loadingController: $isLoading, loginState: $loginState)
-                            }){
-                                HStack{
-                                    ZStack {
-                                        if isLoading {
-                                            ProgressView()
-                                                .tint(.blue) // Matches label color
-                                        } else {
-                                            if loginState==0 {
-                                                Image(systemName: "checkmark.seal.fill")
-//                                                    .foregroundStyle(.green)
+                                .padding(.horizontal) // outer spacing
+                                
+                                
+                                //                        SecureField(text: $passwordInput) {
+                                //                            Text("password")
+                                //                                .foregroundStyle(Color("ThemedText").opacity(0.25))
+                                //                        }
+                                ZStack(alignment: .trailing){
+                                    if isSecured {
+                                        SecureField("Password", text: $loginPasswordInput)
+                                        //                                  .textFieldStyle(.roundedBorder)
+                                            .textContentType(.password)
+                                        //                                  .disableAutocorrection(true)
+                                            .autocorrectionDisabled(true)
+                                            .textInputAutocapitalization(.never)
+                                            .padding() // between text and border, inner spacing
+                                            .background(Color("Background"))
+                                            .clipShape(.capsule)
+                                            .foregroundStyle(Color("ThemedText"))
+                                    } else {
+                                        TextField("Password", text: $loginPasswordInput)
+                                            .textContentType(.password)
+                                        //                                  .disableAutocorrection(true)
+                                            .autocorrectionDisabled(true)
+                                            .textInputAutocapitalization(.never)
+                                            .padding() // between text and border, inner spacing
+                                            .background(Color("Background"))
+                                            .clipShape(.capsule)
+                                            .foregroundStyle(Color("ThemedText"))
+                                            .onSubmit {
+                                                isLoading = true
+                                                withAnimation {
+                                                    errorMessage = ""
+                                                }
+                                                login(username: loginUsernameInput, password: loginPasswordInput, errorMessage: $errorMessage, loadingController: $isLoading, loginState: $loginState)
                                             }
-                                            else if loginState == 1 {
-                                                Image(systemName: "lock")
+                                        
+                                    }
+                                    Button(action: { withAnimation { isSecured.toggle() } }) {
+                                        Image(systemName: isSecured ? "eye.slash" : "eye")
+                                            .accentColor(.gray)
+                                    }
+                                    .padding(.horizontal)
+                                }
+                                .padding(.horizontal) // outer spacing
+                                .padding(.vertical, 10)
+                                if errorMessage != "" {
+                                    Text(errorMessage)
+                                        .foregroundStyle(.red)
+                                        .transition(.opacity)
+                                }
+                                //                        Button("Login", systemImage: "lock", role: .none) {
+                                //                            ProgressView {
+                                //                                Text("Login")
+                                //                            }
+                                //                            withAnimation {
+                                //                                errorMessage = ""
+                                //                            }
+                                //                            login(username: usernameInput, password: passwordInput, errorMessage: $errorMessage)
+                                //                        }
+                                Button(action: {
+                                    isLoading = true
+                                    withAnimation {
+                                        errorMessage = ""
+                                    }
+                                    login(username: loginUsernameInput, password: loginPasswordInput, errorMessage: $errorMessage, loadingController: $isLoading, loginState: $loginState)
+                                }){
+                                    HStack{
+                                        ZStack {
+                                            if isLoading {
+                                                ProgressView()
+                                                    .tint(.blue) // Matches label color
                                             } else {
-                                                Image(systemName: "personalhotspot.slash")
-                                                    .foregroundStyle(.red)
+                                                if loginState==0 {
+                                                    Image(systemName: "checkmark.seal.fill")
+                                                    //                                                    .foregroundStyle(.green)
+                                                }
+                                                else if loginState == 1 {
+                                                    Image(systemName: "lock")
+                                                } else {
+                                                    Image(systemName: "personalhotspot.slash")
+                                                        .foregroundStyle(.red)
+                                                }
                                             }
                                         }
+                                        Text("Login")
                                     }
-                                    Text("Login")
                                 }
+                                //                      .frame(maxWidth: .infinity)
+                                .padding() // inner
+                                .padding(.horizontal) // for a proper ratio among vertical and horizontal spacing
+                                .background(.ultraThinMaterial)
+                                .clipShape(.capsule)
+                                .padding() // outer
+                                .disabled(isLoading)
                             }
-                            //                      .frame(maxWidth: .infinity)
-                            .padding() // inner
-                            .padding(.horizontal) // for a proper ratio among vertical and horizontal spacing
-                            .background(.ultraThinMaterial)
-                            .clipShape(.capsule)
-                            .padding() // outer
-                            .disabled(isLoading)
+                            
                         }
+                        else {
+                            VStack{
+                                HStack{
+                                    Button (action: { isEmptyAccount = true }) {
+                                        Image(systemName: "person.fill")
+                                            .accentColor(.gray)
+                                    }
+                                    .alert("Account Manager", isPresented: $isEmptyAccount) {
+                                        
+                                        Button(action: { isEmptyAccount = false }) {
+                                            Text("Ok")
+                                        }
+                                    } message: {
+                                        Text("No previous Account found")
+                                    }
+                                    TextField(text: $registerUsernameInput) {
+                                        Text("username")
+                                            .foregroundStyle(Color("ThemedText").opacity(0.25))
+                                    }
+                                    .padding() // between text and border, inner spacing
+                                    .background(Color("Background"))
+                                    .clipShape(.capsule)
+                                    .foregroundStyle(Color("ThemedText"))
+                                }
+                                .padding(.horizontal) // outer spacing
+                                HStack{
+                                    Button (action: { isEmptyAccount = true }) {
+                                        Image(systemName: "mail")
+                                            .accentColor(.gray)
+                                    }
+                                    .alert("Account Manager", isPresented: $isEmptyAccount) {
+                                        
+                                        Button(action: { isEmptyAccount = false }) {
+                                            Text("Ok")
+                                        }
+                                    } message: {
+                                        Text("No previous Account found")
+                                    }
+                                    TextField(text: $registerEmailInput) {
+                                        Text("email")
+                                            .foregroundStyle(Color("ThemedText").opacity(0.25))
+                                    }
+                                    .padding() // between text and border, inner spacing
+                                    .background(Color("Background"))
+                                    .clipShape(.capsule)
+                                    .foregroundStyle(Color("ThemedText"))
+                                }
+                                .padding(.horizontal) // outer spacing
+                                .padding(.vertical, 10)
+                                
+                                
+                                //                        SecureField(text: $passwordInput) {
+                                //                            Text("password")
+                                //                                .foregroundStyle(Color("ThemedText").opacity(0.25))
+                                //                        }
+                                HStack{
+                                    if isSecured {
+                                        SecureField("Password", text: $registerPasswordInput)
+                                        //                                  .textFieldStyle(.roundedBorder)
+                                            .textContentType(.password)
+                                        //                                  .disableAutocorrection(true)
+                                            .autocorrectionDisabled(true)
+                                            .textInputAutocapitalization(.never)
+                                            .padding() // between text and border, inner spacing
+                                            .background(Color("Background"))
+                                            .clipShape(.capsule)
+                                            .foregroundStyle(Color("ThemedText"))
+                                    } else {
+                                        TextField("Password", text: $registerPasswordInput)
+                                            .textContentType(.password)
+                                        //                                  .disableAutocorrection(true)
+                                            .autocorrectionDisabled(true)
+                                            .textInputAutocapitalization(.never)
+                                            .padding() // between text and border, inner spacing
+                                            .background(Color("Background"))
+                                            .clipShape(.capsule)
+                                            .foregroundStyle(Color("ThemedText"))
+                                        
+                                    }
+                                    Button(action: { withAnimation { isSecured.toggle() } }) {
+                                        Image(systemName: isSecured ? "eye.slash" : "eye")
+                                            .accentColor(.gray)
+                                    }
+                                }
+                                .padding(.horizontal) // outer spacing
+                                HStack{
+                                    if isSecured {
+                                        SecureField("Confirm Password", text: $registerConfirmPasswordInput)
+                                        //                                  .textFieldStyle(.roundedBorder)
+                                            .textContentType(.password)
+                                        //                                  .disableAutocorrection(true)
+                                            .autocorrectionDisabled(true)
+                                            .textInputAutocapitalization(.never)
+                                            .padding() // between text and border, inner spacing
+                                            .background(Color("Background"))
+                                            .clipShape(.capsule)
+                                            .foregroundStyle(Color("ThemedText"))
+                                    } else {
+                                        TextField("Confirm Password", text: $registerConfirmPasswordInput)
+                                            .textContentType(.password)
+                                        //                                  .disableAutocorrection(true)
+                                            .autocorrectionDisabled(true)
+                                            .textInputAutocapitalization(.never)
+                                            .padding() // between text and border, inner spacing
+                                            .background(Color("Background"))
+                                            .clipShape(.capsule)
+                                            .foregroundStyle(Color("ThemedText"))
+                                            .onSubmit {
+                                                isLoading = true
+                                                withAnimation {
+                                                    errorMessage = ""
+                                                }
+                                                register(username: registerUsernameInput, email: registerEmailInput, password: registerPasswordInput, confirmPassword: registerConfirmPasswordInput, errorMessage: $errorMessage, loadingController: $isLoading)
+                                            }
+                                        
+                                    }
+                                    Button(action: { withAnimation { isSecured.toggle() } }) {
+                                        Image(systemName: isSecured ? "eye.slash" : "eye")
+                                            .accentColor(.gray)
+                                    }
+                                }
+                                .padding(.horizontal) // outer spacing
+                                .padding(.vertical, 10)
+                                
+                                if errorMessage != "" {
+                                    Text(errorMessage)
+                                        .foregroundStyle(.red)
+                                        .transition(.opacity)
+                                }
+                                Button(action: {
+                                    isLoading = true
+                                    withAnimation {
+                                        errorMessage = ""
+                                    }
+                                    register(username: registerUsernameInput, email: registerEmailInput, password: registerPasswordInput, confirmPassword: registerConfirmPasswordInput, errorMessage: $errorMessage, loadingController: $isLoading)
+                                }){
+                                    HStack{
+                                        ZStack {
+                                            if isLoading {
+                                                ProgressView()
+                                                    .tint(.blue) // Matches label color
+                                            } else {
+                                                Image(systemName: "lock")
+                                            }
+                                        }
+                                        Text("Register")
+                                    }
+                                }
+                                //                      .frame(maxWidth: .infinity)
+                                .padding() // inner
+                                .padding(.horizontal) // for a proper ratio among vertical and horizontal spacing
+                                .background(.ultraThinMaterial)
+                                .clipShape(.capsule)
+                                .padding() // outer
+                                .disabled(isLoading)
+                            }
+                        }
+                        Spacer()
+                        AuthSwitcher(auth: $authType)
+                        Spacer()
                         
+                        
+                    }
+                }
+            }
+            //        Text("Page \(item)")
+            //            .font(.title3)
+            Spacer()
+            
+            if switchBinding<3 && switchBinding != 1 {
+                Button(action: {
+                    if(switchBinding >= 3) {
+                        withAnimation {
+                            switchBinding = 0
+                        }
                     }
                     else {
-                        VStack{
-                            HStack{
-                                Button (action: { isEmptyAccount = true }) {
-                                    Image(systemName: "person.fill")
-                                        .accentColor(.gray)
-                                }
-                                .alert("Account Manager", isPresented: $isEmptyAccount) {
-                                    
-                                    Button(action: { isEmptyAccount = false }) {
-                                        Text("Ok")
-                                    }
-                                } message: {
-                                    Text("No previous Account found")
-                                }
-                                TextField(text: $registerUsernameInput) {
-                                    Text("username")
-                                        .foregroundStyle(Color("ThemedText").opacity(0.25))
-                                }
-                                .padding() // between text and border, inner spacing
-                                .background(Color("Background"))
-                                .clipShape(.capsule)
-                                .foregroundStyle(Color("ThemedText"))
-                            }
-                            .padding(.horizontal) // outer spacing
-                            HStack{
-                                Button (action: { isEmptyAccount = true }) {
-                                    Image(systemName: "mail")
-                                        .accentColor(.gray)
-                                }
-                                .alert("Account Manager", isPresented: $isEmptyAccount) {
-                                    
-                                    Button(action: { isEmptyAccount = false }) {
-                                        Text("Ok")
-                                    }
-                                } message: {
-                                    Text("No previous Account found")
-                                }
-                                TextField(text: $registerEmailInput) {
-                                    Text("email")
-                                        .foregroundStyle(Color("ThemedText").opacity(0.25))
-                                }
-                                .padding() // between text and border, inner spacing
-                                .background(Color("Background"))
-                                .clipShape(.capsule)
-                                .foregroundStyle(Color("ThemedText"))
-                            }
-                            .padding(.horizontal) // outer spacing
-                            .padding(.vertical, 10)
-                            
-                            
-                            //                        SecureField(text: $passwordInput) {
-                            //                            Text("password")
-                            //                                .foregroundStyle(Color("ThemedText").opacity(0.25))
-                            //                        }
-                            HStack{
-                                if isSecured {
-                                    SecureField("Password", text: $registerPasswordInput)
-                                    //                                  .textFieldStyle(.roundedBorder)
-                                        .textContentType(.password)
-                                    //                                  .disableAutocorrection(true)
-                                        .autocorrectionDisabled(true)
-                                        .textInputAutocapitalization(.never)
-                                        .padding() // between text and border, inner spacing
-                                        .background(Color("Background"))
-                                        .clipShape(.capsule)
-                                        .foregroundStyle(Color("ThemedText"))
-                                } else {
-                                    TextField("Password", text: $registerPasswordInput)
-                                        .textContentType(.password)
-                                    //                                  .disableAutocorrection(true)
-                                        .autocorrectionDisabled(true)
-                                        .textInputAutocapitalization(.never)
-                                        .padding() // between text and border, inner spacing
-                                        .background(Color("Background"))
-                                        .clipShape(.capsule)
-                                        .foregroundStyle(Color("ThemedText"))
-                                    
-                                }
-                                Button(action: { withAnimation { isSecured.toggle() } }) {
-                                    Image(systemName: isSecured ? "eye.slash" : "eye")
-                                        .accentColor(.gray)
-                                }
-                            }
-                            .padding(.horizontal) // outer spacing
-                            HStack{
-                                if isSecured {
-                                    SecureField("Confirm Password", text: $registerConfirmPasswordInput)
-                                    //                                  .textFieldStyle(.roundedBorder)
-                                        .textContentType(.password)
-                                    //                                  .disableAutocorrection(true)
-                                        .autocorrectionDisabled(true)
-                                        .textInputAutocapitalization(.never)
-                                        .padding() // between text and border, inner spacing
-                                        .background(Color("Background"))
-                                        .clipShape(.capsule)
-                                        .foregroundStyle(Color("ThemedText"))
-                                } else {
-                                    TextField("Confirm Password", text: $registerConfirmPasswordInput)
-                                        .textContentType(.password)
-                                    //                                  .disableAutocorrection(true)
-                                        .autocorrectionDisabled(true)
-                                        .textInputAutocapitalization(.never)
-                                        .padding() // between text and border, inner spacing
-                                        .background(Color("Background"))
-                                        .clipShape(.capsule)
-                                        .foregroundStyle(Color("ThemedText"))
-                                        .onSubmit {
-                                            isLoading = true
-                                            withAnimation {
-                                                errorMessage = ""
-                                            }
-                                            register(username: registerUsernameInput, email: registerEmailInput, password: registerPasswordInput, confirmPassword: registerConfirmPasswordInput, errorMessage: $errorMessage, loadingController: $isLoading)
-                                        }
-                                    
-                                }
-                                Button(action: { withAnimation { isSecured.toggle() } }) {
-                                    Image(systemName: isSecured ? "eye.slash" : "eye")
-                                        .accentColor(.gray)
-                                }
-                            }
-                            .padding(.horizontal) // outer spacing
-                            .padding(.vertical, 10)
-                            
-                            if errorMessage != "" {
-                                Text(errorMessage)
-                                    .foregroundStyle(.red)
-                                    .transition(.opacity)
-                            }
-                            Button(action: {
-                                isLoading = true
-                                withAnimation {
-                                    errorMessage = ""
-                                }
-                                register(username: registerUsernameInput, email: registerEmailInput, password: registerPasswordInput, confirmPassword: registerConfirmPasswordInput, errorMessage: $errorMessage, loadingController: $isLoading)
-                            }){
-                                HStack{
-                                    ZStack {
-                                        if isLoading {
-                                            ProgressView()
-                                                .tint(.blue) // Matches label color
-                                        } else {
-                                            Image(systemName: "lock")
-                                        }
-                                    }
-                                    Text("Register")
-                                }
-                            }
-                            //                      .frame(maxWidth: .infinity)
-                            .padding() // inner
-                            .padding(.horizontal) // for a proper ratio among vertical and horizontal spacing
-                            .background(.ultraThinMaterial)
-                            .clipShape(.capsule)
-                            .padding() // outer
-                            .disabled(isLoading)
+                        withAnimation {
+                            switchBinding+=1
                         }
                     }
-                    AuthSwitcher(auth: $authType)
-                    Spacer()
-                    
-                    
+                }) {
+                    Text("Onboard")
+                        .font(.headline)
                 }
+                .padding()
+                .background(.ultraThinMaterial)
+                .clipShape(.capsule)
+                .padding(.bottom, 40)
+                .transition(.opacity.combined(with: .opacity))
             }
-        }
-        //        Text("Page \(item)")
-        //            .font(.title3)
-        Spacer()
-        
-        if switchBinding<3 && switchBinding != 1 {
-            Button(action: {
-                if(switchBinding >= 3) {
-                    withAnimation {
-                        switchBinding = 0
-                    }
-                }
-                else {
-                    withAnimation {
-                        switchBinding+=1
-                    }
-                }
-            }) {
-                Text("Onboard")
-                    .font(.headline)
-            }
-            .padding()
-            .background(.ultraThinMaterial)
-            .clipShape(.capsule)
-            .padding(.bottom, 40)
-            .transition(.opacity.combined(with: .opacity))
-        }
     }
 }
 
@@ -613,18 +617,19 @@ func sessionLogin(username: String, password: String, errorMessage: Binding<Stri
                 withAnimation {
                     loginState.wrappedValue = 0
                 }
+//                let tokenObject = try JSONDecoder().decode(Token.self, from: data)
+//                let context = PersistenceController.shared.container.viewContext
+//                var newtoken = Token(token: tokenObject.token)
+//                newtoken.token = tokenObject.token
+//                
+//                do {
+//                    try context.save()
+//                    print("saved token to CoreData")
+//                } catch {
+//                    print("failed saving to CoreData: ", error)
+//                }
                 let tokenObject = try JSONDecoder().decode(Token.self, from: data)
-                let context = PersistenceController.shared.container.viewContext
-                var newtoken = Token(token: tokenObject.token)
-                newtoken.token = tokenObject.token
-                
-                do {
-                    try context.save()
-                    print("saved token to CoreData")
-                } catch {
-                    print("failed saving to CoreData: ", error)
-                }
-                
+                KeychainManager.shared.saveToken(token: tokenObject.token)
             }
         } else {
             let finalError = try JSONDecoder().decode(String.self, from: data)

@@ -9,17 +9,40 @@ import Foundation
 import SocketIO
 import UIKit
 import SwiftUI
+import CoreData
+
+
+class RecievePersistenceController {
+    static let shared = RecievePersistenceController()
+    let container: NSPersistentContainer
+
+    init() {
+        container = NSPersistentContainer(name: "Auth") // Use your .xcdatamodeld filename
+        container.loadPersistentStores { (storeDescription, error) in
+            if let error = error as NSError? {
+                fatalError("Unresolved error \(error)")
+            }
+        }
+    }
+}
+
 
 class BroadcastWebSocketManager: ObservableObject {
 
     @Published var isConnected: Bool = false
     @Published var showAlert = false
     @Published var alertMessage: String = ""
+//    @FetchRequest(
+//        sortDescriptors: [NSSortDescriptor(keyPath: \Person.name, ascending: true)],
+//        animation: .default)
+//    private var token: FetchedResults<Auth>
     var manager: SocketManager!
     var socket: SocketIOClient!
     var socketUrl: String
     var username: String
     var displayName: String
+    let token = KeychainManager.shared.getToken() ?? ""
+    var authPayload: [String: Any] = ["token": ""]
 //    public struct MessageArray : Identifiable, Codable, Hashable {
 //        var id: String
 //        var message: String
@@ -43,13 +66,16 @@ class BroadcastWebSocketManager: ObservableObject {
         self.socketUrl = socketUrl
         self.username = username
         self.displayName = displayName ?? username
+        self.authPayload = ["platformInfo": "\(UIDevice.current.name)", "username": username, "displayName": self.displayName,  "token": token]
+        print("token at init: ", token)
+        
         manager = SocketManager(
             socketURL: URL(string: socketUrl)!,
             config: [
                 .log(true),
                 .compress,
                 .forceWebsockets(true),
-                .connectParams(["platformInfo": UIDevice.current.name])
+//                .connectParams(["platformInfo": "\(UIDevice.current.name)", "username": username, "displayName": self.displayName,  "token": token])
             ]
         )
 
@@ -61,7 +87,7 @@ class BroadcastWebSocketManager: ObservableObject {
     func connect(to incomingSocketUrl: String) {
         self.socketUrl = incomingSocketUrl
         print("on socket, connecting to:", self.socketUrl)
-        socket.connect()
+        socket.connect(withPayload: authPayload)
     }
 
     func disconnect() {
