@@ -23,8 +23,6 @@ struct DMContentView: View {
     // MARK: - State
     @State private var users: [UserList?] = []
     @State public var showingAlert = false
-    @State public var inputText = "https://mess-backend-qseb.onrender.com"
-    
     // MARK: - Body
     
     var body: some View {
@@ -82,88 +80,30 @@ private extension DMContentView {
 private extension DMContentView {
     var chatList: some View {
         ScrollView {
-            connectionButton
+//            connectionButton
             staticPreviewChat
             usersSection
         }
         .navigationTitle("Chats")
+        .toolbar {
+            ToolbarItem(placement: .automatic) {
+                
+                NavigationLink {
+                    SearchView()
+                } label: {
+                    Image(systemName: "magnifyingglass")
+                }
+            }
+        }
         .background(Color("Background"))
     }
 }
 // MARK: - Components
 private extension DMContentView {
-    var connectionButton: some View {
-        HStack{
-            if #available(iOS 26.0, *) {
-                Button("Enter URi for Socket") {
-                    showingAlert = true
-                }
-                .sheet(isPresented: $showingAlert) {
-                    connectionSheet
-                        .background(Color("Background"))
-                }
-                .padding()
-                .background(.ultraThinMaterial)
-                .foregroundStyle(
-                    Color("ThemedText")
-                )
-                .clipShape(.capsule)
-                .glassEffect(.regular.interactive(), in: .capsule)
-            } else {
-                Button("Enter URi for Socket") {
-                    showingAlert = true
-                }
-                .sheet(isPresented: $showingAlert) {
-                    connectionSheet
-                        .background(Color("Background"))
-                }
-                .padding()
-                .background(.ultraThinMaterial)
-                .foregroundStyle(
-                    Color("ThemedText")
-                )
-                .clipShape(.capsule)
-            }
-            if #available(iOS 26.0, *) {
-                Button {
-                    connectToServer()
-                } label: {
-                    Image(systemName: "link")
-                }
-                .alert("Important Message", isPresented: $isNoURi) {
-                    Button("Enter URi", role: .cancel) { showingAlert = true; isNoURi = false }
-                           Button("Cancel", role: .destructive) { isNoURi = false }
-                       } message: {
-                           Text("Please enter a URi to connect to server")
-                       }
-                .padding()
-                .background(.ultraThinMaterial)
-                .clipShape(.capsule)
-                .glassEffect(.regular.interactive(), in: .capsule)
-            } else {
-                Button {
-                    connectToServer()
-                } label: {
-                    Image(systemName: "link")
-                }
-                .alert("Important Message", isPresented: $isNoURi) {
-                    Button("Enter URi", role: .cancel) { showingAlert = true; isNoURi = false }
-                           Button("Cancel", role: .destructive) { isNoURi = false }
-                       } message: {
-                           Text("Please enter a URi to connect to server")
-                       }
-                .padding()
-                .background(.ultraThinMaterial)
-                .clipShape(.capsule)
-            }
-            
-        }
-    }
     
     var staticPreviewChat: some View {
-        
         NavigationLink {
-            ChatView(socketURL: inputText, username: "Raj Surani")
+            ChatView(username: "Raj Surani")
         } label: {
             TitleRow(
                 username: "Raj Surani",
@@ -185,7 +125,7 @@ private extension DMContentView {
 private extension DMContentView {
     func userRow(_ user: UserList) -> some View {
         NavigationLink {
-            ChatView(socketURL: inputText, username: user.username)
+            ChatView(username: user.username)
         } label: {
             TitleRow(
                 username: user.username,
@@ -194,50 +134,6 @@ private extension DMContentView {
             .padding(.horizontal)
             .background(.ultraThinMaterial)
         }
-    }
-}
-// MARK: - Networking
-extension DMContentView {
-    public func connectToServer() {
-        Task {
-            do {
-                users = try await fetchUsers()
-            } catch {
-                print(
-                    "Failed fetching users:",
-                    error
-                )
-            }
-        }
-    }
-    func fetchUsers() async throws -> [UserList?] {
-        
-        if inputText == "" {
-            isNoURi = true
-        }
-        let dmUserURL = inputText + "/dmusers"
-        guard let url = URL(
-            string: dmUserURL
-        ) else {
-            throw URLError(.badURL)
-        }
-        let (data, _) = try await URLSession
-            .shared
-            .data(from: url)
-        if let jsonString = String(data: data, encoding: .utf8) {
-            print("Raw JSON String: \(jsonString)")
-        }
-        let jsondata = try JSONDecoder()
-            .decode(
-                [UserList].self,
-                from: data
-            )
-        print("recieved data: ", jsondata)
-        return try JSONDecoder()
-            .decode(
-                [UserList].self,
-                from: data
-            )
     }
 }
 // MARK: - Models

@@ -36,26 +36,15 @@ struct TitleRow: View {
                         .transition(.opacity)
                 }
             }
-//            .onTapGesture {
-//                withAnimation {
-//                    isConnected.toggle() // for testing only
-//                }
-//            }
             
             Spacer()
             ZStack{
                 Image(systemName: "phone.fill")
                     .foregroundStyle(.gray)
                     .clipShape(.circle)
-//                  .frame(width: 50, height: 50)
                     .padding(10)
                     .background(.white)
                     .clipShape(.circle)
-                
-                    Circle()
-                    .fill(isConnected ? .green : Color.red.opacity(0.5))
-                        .frame(width: 10, height: 10)
-                        .offset(x: 30 ,y: -30)
             }
         }
         .frame(maxWidth: .infinity, alignment: .leading)

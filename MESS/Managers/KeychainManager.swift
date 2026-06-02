@@ -26,6 +26,7 @@ class KeychainManager {
         ]
         let status = SecItemAdd(query as CFDictionary, nil)
         if status == errSecSuccess {
+            print(token)
             print("token saved to keychain")
         } else {
             print("failed saving token:", status)
@@ -98,7 +99,6 @@ class KeychainManager {
         print("Bearer \(token!)")
         do {
             let (data, response) = try await URLSession.shared.data(for: request)
-            
             print("request ended !!")
             
             guard let httpResponse = response as? HTTPURLResponse else {

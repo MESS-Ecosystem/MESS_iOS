@@ -9,10 +9,10 @@ import SwiftUI
 
 struct ChatView: View {
     // @StateObject var socket = RawWebSocketManager()
-    var socketURL: String
+//    var socketURL: String
     var username: String
 //    @StateObject var socket = WebSocketManager(socketUrl: "http://192.168.90.144:8080/")
-    @StateObject var socket: DMWebSocketManager
+//    @StateObject var socket: DMWebSocketManager
     
     @State private var messageInput = ""
     @State private var keyboardHeight: CGFloat = 0
@@ -20,13 +20,23 @@ struct ChatView: View {
     @FocusState private var focus: Bool
     var messageArray = ["Hi There !!", "How you're doin",  "Im glad, we could talk to you on a Private Server, where no one could read our conversations directly"]
     
-    init(socketURL: String, username: String) {
-        self.socketURL = socketURL
+    init(username: String) {
         self.username = username
+//        _socket = StateObject(wrappedValue: BroadcastWebSocketManager(socketUrl: url, username: username))
         
-        _socket = StateObject(wrappedValue: DMWebSocketManager(socketUrl: socketURL))
+//        if socket.isConnected == false {
+//            socket.connect()
+//        }
         
     }
+    
+//    init(socketURL: String, username: String) {
+//        self.socketURL = socketURL
+//        self.username = username
+//        
+//        _socket = StateObject(wrappedValue: DMWebSocketManager(socketUrl: socketURL))
+//        
+//    }
     
     
     var body: some View {
@@ -56,25 +66,26 @@ struct ChatView: View {
                         .padding([.vertical, .leading], 10)
                     VStack {
                         HStack{
+//                            Button(action: {
+//                                socket.connect()
+//                                print("socket connection sent")
+//                            }){
+//                                Image(systemName: socket.isConnected ? "link.circle.fill" : "link")
+//                                    .padding()
+//                                    .background(Color("Foreground"))
+//                                    .clipShape(.capsule)
+//                            }
+//                            .alert("Error", isPresented: $socket.showAlert) {
+//                                Button("Cancel", role: .destructive) {}
+//                                Button("Reconnect", role: .cancel) {
+//                                    socket.connect()
+//                                }
+//                            } message: {
+//                                Text(socket.alertMessage)
+//                            }
                             Button(action: {
-                                socket.connect()
-                                print("socket connection sent")
-                            }){
-                                Image(systemName: socket.isConnected ? "link.circle.fill" : "link")
-                                    .padding()
-                                    .background(Color("Foreground"))
-                                    .clipShape(.capsule)
-                            }
-                            .alert("Error", isPresented: $socket.showAlert) {
-                                Button("Cancel", role: .destructive) {}
-                                Button("Reconnect", role: .cancel) {
-                                    socket.connect()
-                                }
-                            } message: {
-                                Text(socket.alertMessage)
-                            }
-                            Button(action: {
-                                socket.send(message: messageInput)
+//                                socket.send(message: messageInput)
+                                
                             }) {
                                 Image(systemName: "paperplane.fill")
                                     .padding()
@@ -95,10 +106,10 @@ struct ChatView: View {
             }
             .background(Color("Background"))
         }
-        .onAppear {
+//        .onAppear {
 //            KeyboardObserver()
-            socket.connect()
-        }
+//            socket.connect()
+//        }
         .ignoresSafeArea(edges: .bottom) // for keeping the experience more better
         .background(Color("Background"))
     }
@@ -125,5 +136,5 @@ struct ChatView: View {
 }
 
 #Preview {
-    ChatView(socketURL: "http://localhost:8080",username: "Hideo Kojima")
+    ChatView(username: "Hideo Kojima")
 }

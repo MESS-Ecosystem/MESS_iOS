@@ -7,6 +7,7 @@
 
 import Foundation
 import SocketIO
+import UIKit
 
 class DMWebSocketManager: ObservableObject {
     
@@ -15,26 +16,31 @@ class DMWebSocketManager: ObservableObject {
     @Published var alertMessage: String = ""
     var manager: SocketManager!
     var socket: SocketIOClient!
-    var DMSocketUrl: String
-    init(socketUrl: String) {
-        self.DMSocketUrl = socketUrl + "/DM"
+    var socketUrl: String
+    var username: String
+    var displayName: String
+    let token = KeychainManager.shared.getToken() ?? ""
+    var authPayload: [String: Any] = ["token": ""]
+    init(username: String, displayName: String? = "iOS") {
+        self.socketUrl = "https://mess-backend-qseb.onrender.com/DM"
+        self.username = username
+        self.displayName = displayName ?? username
+        self.authPayload = ["platformInfo": "\(UIDevice.current.name)", "username": username, "displayName": self.displayName,  "token": token]
         manager = SocketManager(
-            socketURL: URL(string: DMSocketUrl)!,
+            socketURL: URL(string: socketUrl)!,
             config: [
                 .log(true),
                 .compress,
                 .forceWebsockets(true)
             ]
         )
-
         socket = manager.defaultSocket
 
         setupListeners()
     }
 
     func connect() {
-        print("connecting /DM namespace to: ", DMSocketUrl)
-        socket.connect()
+        socket.connect(withPayload: authPayload)
     }
 
     func disconnect() {

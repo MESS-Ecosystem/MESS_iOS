@@ -96,7 +96,7 @@ struct BroadcastChatView: View {
                                     alertFocus = false
                                     showingAlert = false // fallback
                                     print("socket connection sent to:", SocketURL)
-                                    socket.connect(to: SocketURL)
+                                    socket.connect()
                                 }
                             }){
                                 Image(systemName: socket.isConnected ? "link.circle.fill" : "link")
@@ -118,7 +118,7 @@ struct BroadcastChatView: View {
                             .alert("Error", isPresented: $socket.showAlert) {
                                 Button("Cancel", role: .destructive) {}
                                 Button("Reconnect", role: .cancel) {
-                                    socket.connect(to: SocketURL)
+                                    socket.connect()
                                 }
                             } message: {
                                 Text(socket.alertMessage)
@@ -157,7 +157,7 @@ struct BroadcastChatView: View {
             .background(Color("Background"))
         }
         .onAppear {
-            socket.connect(to: SocketURL)
+            socket.connect()
 //            KeyboardObserver()
         }
         .ignoresSafeArea(edges: .bottom) // for keeping the experience more better

@@ -23,9 +23,11 @@ struct MessageTitleRow: View {
                     .font(.title3)
                     .bold()
                     .foregroundStyle(Color("ThemedText"))
-                Text("Online")
-                    .font(.caption)
-                    .foregroundStyle(.gray)
+                if isConnected == true {
+                    Text("Online")
+                        .font(.caption)
+                        .foregroundStyle(.gray)
+                }
             }
             Spacer()
             ZStack{
@@ -36,11 +38,6 @@ struct MessageTitleRow: View {
                     .padding(10)
                     .background(.white)
                     .clipShape(.circle)
-                
-                    Circle()
-                    .fill(isConnected ? .green : Color.red.opacity(0.5))
-                        .frame(width: 10, height: 10)
-                        .offset(x: 20 ,y: -20)
             }
         }
         .frame(maxWidth: .infinity, alignment: .leading)

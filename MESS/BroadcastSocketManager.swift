@@ -38,7 +38,7 @@ class BroadcastWebSocketManager: ObservableObject {
 //    private var token: FetchedResults<Auth>
     var manager: SocketManager!
     var socket: SocketIOClient!
-    var socketUrl: String
+    var socketUrl: String = "https://mess-backend-qseb.onrender.com/"
     var username: String
     var displayName: String
     let token = KeychainManager.shared.getToken() ?? ""
@@ -62,15 +62,17 @@ class BroadcastWebSocketManager: ObservableObject {
             displayName: ""
         )
     ]
-    init(socketUrl: String, username: String, displayName: String? = "iOS") {
-        self.socketUrl = socketUrl
+    init(socketUrl: String?, username: String, displayName: String? = "iOS") {
+        if socketUrl != nil {
+            self.socketUrl = socketUrl ?? "https://mess-backend-qseb.onrender.com/"
+        }
         self.username = username
         self.displayName = displayName ?? username
         self.authPayload = ["platformInfo": "\(UIDevice.current.name)", "username": username, "displayName": self.displayName,  "token": token]
         print("token at init: ", token)
         
         manager = SocketManager(
-            socketURL: URL(string: socketUrl)!,
+            socketURL: URL(string: socketUrl!)!,
             config: [
                 .log(true),
                 .compress,
@@ -84,8 +86,7 @@ class BroadcastWebSocketManager: ObservableObject {
         setupListeners()
     }
 
-    func connect(to incomingSocketUrl: String) {
-        self.socketUrl = incomingSocketUrl
+    func connect() {
         print("on socket, connecting to:", self.socketUrl)
         socket.connect(withPayload: authPayload)
     }

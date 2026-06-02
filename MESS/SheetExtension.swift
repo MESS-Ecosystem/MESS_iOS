@@ -18,10 +18,10 @@ extension DMContentView {
                     .font(.caption)
                     .padding(.bottom)
                     .foregroundColor(.gray)
-                TextField(
-                    "Socket URI",
-                    text: $inputText
-                )
+//                TextField(
+//                    "Socket URI",
+//                    text: $inputText
+//                )
                 
                 .foregroundStyle(Color("ThemedText"))
                 .padding()
@@ -29,7 +29,7 @@ extension DMContentView {
                 .clipShape(.capsule)
                 .padding(.horizontal)
                 Button("Connect") {
-                    connectToServer()
+//                    connectToServer()
                     showingAlert = false
                 }
                 .padding()
@@ -45,7 +45,6 @@ extension DMContentView {
             .navigationBarTitleDisplayMode(.inline)
         }
         .background(.ultraThinMaterial)
-
     }
 }
 
@@ -71,7 +70,7 @@ extension BroadcastChatView {
                 .clipShape(.capsule)
                 .padding(.horizontal)
                 Button("Connect") {
-                    socket.connect(to: SocketURL)
+                    socket.connect()
                     showingAlert = false
                 }
                 .padding()
