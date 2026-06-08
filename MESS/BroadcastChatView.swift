@@ -78,9 +78,12 @@ struct BroadcastChatView: View {
                             socket.broadcastMessageArray.append(
                                 MessageArray(
                                     id: "98741265",
+                                    senderId: "",
+                                    timeStamp: Date(),
+                                    conversationId: "DEVBROADCAST", // always true, when sending
                                     message: messageInput,
-                                    isSent: true, // always true, when sending
-                                    displayName: ""
+                                    isSent: true,
+                                    displayName: "iOS"
                                 )
                             )
                             messageInput = ""
@@ -129,6 +132,8 @@ struct BroadcastChatView: View {
                                 socket.broadcastMessageArray.append(
                                     MessageArray(
                                         id: "98741265",
+                                        timeStamp: Date(),
+                                        conversationId: "",
                                         message: messageInput,
                                         isSent: true, // always true, when sending
                                         displayName: ""

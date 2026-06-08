@@ -70,7 +70,7 @@ extension BroadcastChatView {
                 .clipShape(.capsule)
                 .padding(.horizontal)
                 Button("Connect") {
-                    socket.connect()
+                    DMWebSocketManager.shared.connect()
                     showingAlert = false
                 }
                 .padding()

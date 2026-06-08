@@ -299,7 +299,8 @@ struct OnboardingPageView: View {
                                                 withAnimation {
                                                     errorMessage = ""
                                                 }
-                                                register(username: registerUsernameInput, email: registerEmailInput, password: registerPasswordInput, confirmPassword: registerConfirmPasswordInput, errorMessage: $errorMessage, loadingController: $isLoading)
+                                                register(username: registerUsernameInput, email: registerEmailInput, password: registerPasswordInput, confirmPassword: registerConfirmPasswordInput, errorMessage: $errorMessage, loadingController: $isLoading, loginState: $loginState
+                                                )
                                             }
                                         
                                     }
@@ -321,7 +322,15 @@ struct OnboardingPageView: View {
                                     withAnimation {
                                         errorMessage = ""
                                     }
-                                    register(username: registerUsernameInput, email: registerEmailInput, password: registerPasswordInput, confirmPassword: registerConfirmPasswordInput, errorMessage: $errorMessage, loadingController: $isLoading)
+                                    register(
+                                        username: registerUsernameInput,
+                                        email: registerEmailInput,
+                                        password: registerPasswordInput,
+                                        confirmPassword: registerConfirmPasswordInput,
+                                        errorMessage: $errorMessage,
+                                        loadingController: $isLoading,
+                                        loginState: $loginState
+                                    )
                                 }){
                                     HStack{
                                         ZStack {
@@ -329,7 +338,16 @@ struct OnboardingPageView: View {
                                                 ProgressView()
                                                     .tint(.blue) // Matches label color
                                             } else {
-                                                Image(systemName: "lock")
+                                                if loginState==0 {
+                                                    Image(systemName: "checkmark.seal.fill")
+                                                    //                                                    .foregroundStyle(.green)
+                                                }
+                                                else if loginState == 1 {
+                                                    Image(systemName: "lock")
+                                                } else {
+                                                    Image(systemName: "personalhotspot.slash")
+                                                        .foregroundStyle(.red)
+                                                }
                                             }
                                         }
                                         Text("Register")
@@ -523,8 +541,14 @@ struct Token: Codable {
     var token: String
 }
 
-public func login(username: String, password: String, errorMessage: Binding<String>, loadingController: Binding<Bool>, loginState: Binding<Int>) {
-    Task {
+public func login(
+    username: String,
+    password: String,
+    errorMessage: Binding<String>,
+    loadingController: Binding<Bool>,
+    loginState: Binding<Int>
+) {
+        Task {
         do {
             try await sessionLogin(username: username, password: password, errorMessage: errorMessage, loginState: loginState)
             loadingController.wrappedValue = false
@@ -542,7 +566,15 @@ func isValidEmail (email: String) -> Bool {
     return emailPred.evaluate(with: email)
 }
 
-public func register(username: String, email: String, password: String, confirmPassword: String, errorMessage: Binding<String>, loadingController: Binding<Bool>) {
+public func register(
+    username: String,
+    email: String,
+    password: String,
+    confirmPassword: String,
+    errorMessage: Binding<String>,
+    loadingController: Binding<Bool>,
+    loginState:Binding<Int>
+) {
     Task {
         do {
             if (password != confirmPassword || password.count < 8) {
@@ -554,7 +586,13 @@ public func register(username: String, email: String, password: String, confirmP
             }
             else {
                 errorMessage.wrappedValue = ""
-                try await sessionRegister(username: username, email: email, password: password, errorMessage: errorMessage)
+                try await sessionRegister(
+                    username: username,
+                    email: email,
+                    password: password,
+                    errorMessage: errorMessage,
+                    loginState: loginState
+                )
             }
             loadingController.wrappedValue = false
         } catch {
@@ -675,7 +713,7 @@ func sessionLogin(username: String, password: String, errorMessage: Binding<Stri
 
 
 @MainActor
-func sessionRegister(username: String, email: String, password: String, errorMessage: Binding<String>) async throws {
+func sessionRegister(username: String, email: String, password: String, errorMessage: Binding<String>, loginState:Binding<Int>) async throws {
     let url = URL(string: "https://mess-backend-qseb.onrender.com/auth/register")!
     
     var request = URLRequest(url: url)
@@ -704,8 +742,11 @@ func sessionRegister(username: String, email: String, password: String, errorMes
         
         if (200...299).contains(httpResponse.statusCode) {
             if let responseString = String(data: data, encoding: .utf8) {
-                errorMessage.wrappedValue = "\(String(describing: String(data: data, encoding: .utf8)))"
+//                errorMessage.wrappedValue = "\(String(describing: String(data: data, encoding: .utf8)))"
                 print("Response Body: \(responseString)")
+                let tokenObject = try JSONDecoder().decode(Token.self, from: data)
+                KeychainManager.shared.saveToken(token: tokenObject.token)
+                loginState.wrappedValue = 2
             }
         } else {
             let finalError = try JSONDecoder().decode(String.self, from: data)

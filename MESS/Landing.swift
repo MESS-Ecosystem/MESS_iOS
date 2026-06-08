@@ -28,8 +28,14 @@ struct Landing: View {
                             Image(systemName: "message")
                         }
                     }
+                    .onAppear() {
+                        DMWebSocketManager.shared.connect()
+                    }
+                    .onDisappear() {
+                        
+                        DMWebSocketManager.shared.disconnect()
+                    }
                 
-                //            BroadcastChatView(socketURL: "http://", username: "Broadcast")
                 BroadcastContentView()
                     .padding(.bottom, 1)
                     .background(Color("Background"))
@@ -67,16 +73,27 @@ struct Landing: View {
                 Color.clear.frame(height: 20) // Effectively adds "padding" to the bottom safe area
             }
             .ignoresSafeArea(edges: .top)
-            .task {
-                do {
-                    status = try await pingServer()
-                } catch {
-                    print(error)
+            .onAppear() {
+                Task {
+                    do {
+                        status = try await pingServer()
+                    } catch {
+                        print(error)
+                    }
                 }
             }
         }
         else {
             OnboardingView()
+                .onAppear() {
+                    Task {
+                        do {
+                            status = try await pingServer()
+                        } catch {
+                            print(error)
+                        }
+                    }
+                }
         }
         
         //            VStack{
@@ -145,5 +162,5 @@ struct Landing: View {
 #Preview {
     UserDefaults.standard.set(true, forKey: "hasCompletedOnboarding")
 
-    return Landing()
+    return Landing().environmentObject(ChatListViewModel.shared)
 }

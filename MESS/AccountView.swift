@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Kingfisher
 
 struct AccountView: View {
     @AppStorage("hasCompletedOnboarding") public var hasCompletedOnboarding: Bool = true
@@ -18,16 +19,7 @@ struct AccountView: View {
         }
     }
     @State private var didImageLoaded: Bool = false
-    let imageTransaction: Transaction = {
-        var t = Transaction()
-        // A bouncy, fluid spring replaces the basic linear/easeInOut curves
-        t.animation = .spring(
-            response: 1.55,
-            dampingFraction: 0.82,
-            blendDuration: 0.5
-        )
-        return t
-    }()
+
     var body: some View {
         VStack {
             NavigationView {
@@ -38,29 +30,8 @@ struct AccountView: View {
                     } label: {
                         HStack {
                             if userData.profile != nil {
-                                AsyncImage(
-                                    url: URL(
-                                        string: userData.profile
-                                        ?? "placeholderProfile"
-                                    ),
-                                    transaction: imageTransaction
-                                ) { phase in
-                                    switch phase {
-                                    case .success(let image):
-                                        
-                                        image.resizable()
-                                            .aspectRatio(contentMode: .fill)
-                                            .blur(radius: didImageLoaded ? 0 : 5)
-                                            .scaleEffect(didImageLoaded ? 1 : 1.25)
-                                            .frame(width: 100, height: 70)
-                                            .clipShape(.capsule)
-                                            .onAppear {
-                                                withAnimation {
-                                                    didImageLoaded = true
-                                                }
-                                            }
-                                        
-                                    case .empty, .failure:
+                                KFImage(URL(string: userData.profile ?? "placeholderProfile"))
+                                    .placeholder {
                                         ZStack {
                                             Image("placeholderProfile")
                                                 .resizable()
@@ -72,10 +43,18 @@ struct AccountView: View {
                                             ProgressView()
                                                 .tint(.white)
                                         }
-                                    @unknown default:
-                                        EmptyView()
                                     }
-                                }
+                                    .onSuccess { _ in
+                                        withAnimation {
+                                            didImageLoaded = true
+                                        }
+                                    }
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fill)
+                                    .blur(radius: didImageLoaded ? 0 : 5)
+                                    .scaleEffect(didImageLoaded ? 1 : 1.25)
+                                    .frame(width: 100, height: 70)
+                                    .clipShape(.capsule)
                             } else {
                                 Image("placeholderProfile")
                                     .resizable()
@@ -340,16 +319,7 @@ struct AccountEditView: View {
     @State private var imageStatusAlert = false
     @State private var imageStatusResult: String = ""
     @State private var imageStatus: String = ""
-    let imageTransaction: Transaction = {
-        var t = Transaction()
-        // A bouncy, fluid spring replaces the basic linear/easeInOut curves
-        t.animation = .spring(
-            response: 0.55,
-            dampingFraction: 0.82,
-            blendDuration: 0.2
-        )
-        return t
-    }()
+
     init () {
         print("inputImage", inputImage as Any)
         print("userImage", userData.profile as Any)
@@ -372,31 +342,8 @@ struct AccountEditView: View {
                         .padding()
                 } else {
                     if (userData.profile != nil) {
-                        AsyncImage(
-                            url: URL(string: userData.profile ?? "placeholderProfile"),
-                            transaction: imageTransaction
-                        ) { phase in
-                            switch phase {
-                            case .success(let image):
-                                image.resizable()
-                                    .aspectRatio(contentMode: .fill)
-                                    .blur(radius: didLoadImage ? 0 : 20)
-                                    .scaleEffect(didLoadImage ? 1.0 : 1.15)
-                                    .frame(maxWidth: 400, maxHeight: 400)
-                                    .clipShape(.capsule)
-                                    .onAppear {
-                                        withAnimation(
-                                            .spring(
-                                                response: 1,
-                                                dampingFraction: 0.8,
-                                                blendDuration: 1
-                                            )
-                                        ) {
-                                            didLoadImage = true
-                                        }
-                                    }
-                                
-                            case .empty, .failure:
+                        KFImage(URL(string: userData.profile ?? "placeholderProfile"))
+                            .placeholder {
                                 ZStack {
                                     Image("placeholderProfile")
                                         .resizable()
@@ -408,17 +355,25 @@ struct AccountEditView: View {
                                     ProgressView()
                                         .tint(.white)
                                 }
-                                // .onDisappear {
-                                //     didLoadImage = false
-                                // }
-                                
-                            @unknown default:
-                                EmptyView()
                             }
-                        }
-                        .frame(maxWidth: 400)
-                        .clipShape(.capsule)
-                        .padding()
+                            .onSuccess { _ in
+                                withAnimation(
+                                    .spring(
+                                        response: 1,
+                                        dampingFraction: 0.8,
+                                        blendDuration: 1
+                                    )
+                                ) {
+                                    didLoadImage = true
+                                }
+                            }
+                            .resizable()
+                            .aspectRatio(contentMode: .fill)
+                            .blur(radius: didLoadImage ? 0 : 20)
+                            .scaleEffect(didLoadImage ? 1.0 : 1.15)
+                            .frame(maxWidth: 400, maxHeight: 400)
+                            .clipShape(.capsule)
+                            .padding()
                     } else {
                         Image("placeholderProfile")
                             .resizable()

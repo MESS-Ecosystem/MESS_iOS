@@ -8,111 +8,154 @@
 import SwiftUI
 
 struct ChatView: View {
-    // @StateObject var socket = RawWebSocketManager()
-//    var socketURL: String
+    @FetchRequest var messages: FetchedResults<ChatMessage>
     var username: String
-//    @StateObject var socket = WebSocketManager(socketUrl: "http://192.168.90.144:8080/")
-//    @StateObject var socket: DMWebSocketManager
-    
+    var userInfo: ChatUser?
     @State private var messageInput = ""
     @State private var keyboardHeight: CGFloat = 0
-    // @State public var isConnected: Bool = false
     @FocusState private var focus: Bool
-    var messageArray = ["Hi There !!", "How you're doin",  "Im glad, we could talk to you on a Private Server, where no one could read our conversations directly"]
-    
     init(username: String) {
         self.username = username
-//        _socket = StateObject(wrappedValue: BroadcastWebSocketManager(socketUrl: url, username: username))
-        
-//        if socket.isConnected == false {
-//            socket.connect()
-//        }
-        
+        _messages = FetchRequest(
+            sortDescriptors: [
+                NSSortDescriptor(
+                    key: "timeStamp",
+                    ascending: true
+                )
+            ],
+            predicate: NSPredicate(
+                format: "conversationId == %@",
+                username
+            )
+        )
+        userInfo = PersistantController.shared.getUser(
+            username: username
+        )
     }
     
-//    init(socketURL: String, username: String) {
-//        self.socketURL = socketURL
-//        self.username = username
-//        
-//        _socket = StateObject(wrappedValue: DMWebSocketManager(socketUrl: socketURL))
-//        
-//    }
     
+    func sendMessage () {
+        if messageInput != "" {
+            PersistantController.shared.saveMessage(
+                conversationId: username,
+                senderId: "me",
+                message: messageInput,
+                timeStamp: Date()
+            )
+            DMWebSocketManager.shared.send(message: messageInput)
+            messageInput = ""
+        }
+    }
     
     var body: some View {
-        VStack(alignment: .center) {
-            ScrollView{
-                ForEach(messageArray, id: \.self) { text in
-                    MessageBubble(message: Message(id: "12345", message: text, isSent: true, timeStamp: Date()))
-                }
-            }
-            // .clipped()
-            .safeAreaInset(edge: .top){
-//                MessageTitleRow(username: "Hideo Kojima", isConnected: socket.isConnected)
-//                    .padding(.horizontal)
-//                    .background(.ultraThinMaterial)
-//                    .navigationTitle("Hideo Kojima")
-                Text("")
-                    .navigationTitle(username)
-            }
-            .safeAreaInset(edge: .bottom) {
-                HStack {
-                    TextField("Message", text: $messageInput)
-                        .focused($focus)
-                        .padding() // between the text and inputbox
-                        .background(Color("Foreground"))
-                    // .background(.ultraThinMaterial)
-                        .clipShape(.capsule)
-                        .padding([.vertical, .leading], 10)
-                    VStack {
-                        HStack{
-//                            Button(action: {
-//                                socket.connect()
-//                                print("socket connection sent")
-//                            }){
-//                                Image(systemName: socket.isConnected ? "link.circle.fill" : "link")
-//                                    .padding()
-//                                    .background(Color("Foreground"))
-//                                    .clipShape(.capsule)
-//                            }
-//                            .alert("Error", isPresented: $socket.showAlert) {
-//                                Button("Cancel", role: .destructive) {}
-//                                Button("Reconnect", role: .cancel) {
-//                                    socket.connect()
-//                                }
-//                            } message: {
-//                                Text(socket.alertMessage)
-//                            }
-                            Button(action: {
-//                                socket.send(message: messageInput)
-                                
-                            }) {
-                                Image(systemName: "paperplane.fill")
-                                    .padding()
-                                    .background(Color("Foreground"))
-                                    .clipShape(.capsule)
-                            }
+        ZStack(alignment: .top) {
+            
+            ScrollViewReader { proxy in
+                ScrollView {
+                    LazyVStack {
+                        ForEach(messages, id: \.objectID) { message in
+                            MessageBubble(
+                                message: Message(
+                                    id: message.conversationId ?? "",
+                                    message: message.message ?? "",
+                                    isSent: message.senderId == "me",
+                                    timeStamp: message.timeStamp ?? Date()
+                                ),
+                                profile: userInfo?.profile
+                            )
+                        }
+                        MessageBubble(
+                            message: Message(
+                                id: "hq029837jeh",
+                                message: "Hehe",
+                                isSent: true,
+                                timeStamp: Date()
+                            ),
+                            profile: nil
+                        )
+                    }
+                    .onChange(of: messages.count) { newCount in
+                        print("Messages count changed:", newCount)
+                        guard let lastId = messages.last?.objectID else { return }
+                        
+                        DispatchQueue.main.async {
+                            withAnimation (.easeInOut(duration: 1), {
+                                proxy.scrollTo(lastId, anchor: .bottom)
+                            })
                         }
                     }
-                    // .frame(maxWidth: .infinity, alignment: .center)
-                    .padding([.vertical, .trailing], 10)
                 }
-                // .background(Color(.gray))
-                .background(.ultraThinMaterial)
-                .clipShape(.capsule)
-                .padding()
-                .padding(.bottom, keyboardHeight)
-                .animation(.easeOut(duration: 0.25), value: keyboardHeight)
+                .onAppear {
+                    //            KeyboardObserver()
+                    //            socket.connect()
+                    print("\n\n\n", messages, "\n\n\n")
+                    DMWebSocketManager.shared.chat(with: username)
+                }
+                .onDisappear {
+                    DMWebSocketManager.shared.closeChat(
+                        with: username
+                    )
+                }
+                .safeAreaInset(edge: .top){
+                    Text("")
+                        .navigationTitle(username)
+                }
+                .safeAreaInset(edge: .bottom) {
+                    HStack {
+                        TextField("Message", text: $messageInput)
+                            .focused($focus)
+                            .padding() // between the text and inputbox
+                            .background(Color("Foreground"))
+                            .clipShape(.capsule)
+                            .padding([.vertical, .leading], 10)
+                            .onSubmit {
+                                sendMessage()
+                            }
+                        VStack {
+                            HStack{
+                                Button(action: {
+                                    sendMessage()
+                                }) {
+                                    Image(systemName: "paperplane.fill")
+                                        .padding()
+                                        .background(Color("Foreground"))
+                                        .clipShape(.capsule)
+                                }
+                            }
+                        }
+                        // .frame(maxWidth: .infinity, alignment: .center)
+                        .padding([.vertical, .trailing], 10)
+                    }
+                    // .background(Color(.gray))
+                    .background(.ultraThinMaterial)
+                    .clipShape(.capsule)
+                    .padding()
+                    .padding(.bottom, keyboardHeight)
+                    .animation(.easeOut(duration: 0.25), value: keyboardHeight)
+                }
+                .background(Color("Background"))
+                .ignoresSafeArea(edges: .bottom) // for keeping the experience more better
+                .background(Color("Background"))
             }
-            .background(Color("Background"))
+//            .safeAreaInset(edge: .top, spacing: 0) {
+//                Rectangle()
+//                    .fill(.thinMaterial)
+//                    .frame(height: 80)
+//                BlurView(style: .systemUltraThinMaterial)
+//                    .frame(height: 100)
+//            }
         }
-//        .onAppear {
-//            KeyboardObserver()
-//            socket.connect()
-//        }
-        .ignoresSafeArea(edges: .bottom) // for keeping the experience more better
-        .background(Color("Background"))
     }
+    
+//    struct BlurView: UIViewRepresentable {
+//        let style: UIBlurEffect.Style
+//        
+//        func makeUIView(context: Context) -> UIVisualEffectView {
+//            UIVisualEffectView(effect: UIBlurEffect(style: style))
+//        }
+//        
+//        func updateUIView(_ uiView: UIVisualEffectView, context: Context) {}
+//    }
     
     func KeyboardObserver() {
         NotificationCenter.default.addObserver(

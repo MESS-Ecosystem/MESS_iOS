@@ -10,6 +10,7 @@ struct DMContentView: View {
     // MARK: - Environment
     @Environment(\.horizontalSizeClass)
     private var horizontalSizeClass
+    @EnvironmentObject var chatListVM: ChatListViewModel
     // MARK: - Device Checks
     
     private var isIpad: Bool {
@@ -21,8 +22,10 @@ struct DMContentView: View {
     }
     
     // MARK: - State
-    @State private var users: [UserList?] = []
     @State public var showingAlert = false
+//    @StateObject var PersistantController: PersistenceController = PersistenceController()
+    
+    
     // MARK: - Body
     
     var body: some View {
@@ -81,7 +84,7 @@ private extension DMContentView {
     var chatList: some View {
         ScrollView {
 //            connectionButton
-            staticPreviewChat
+//            staticPreviewChat
             usersSection
         }
         .navigationTitle("Chats")
@@ -90,6 +93,7 @@ private extension DMContentView {
                 
                 NavigationLink {
                     SearchView()
+                        .navigationTitle("Search")
                 } label: {
                     Image(systemName: "magnifyingglass")
                 }
@@ -101,38 +105,82 @@ private extension DMContentView {
 // MARK: - Components
 private extension DMContentView {
     
-    var staticPreviewChat: some View {
-        NavigationLink {
-            ChatView(username: "Raj Surani")
-        } label: {
-            TitleRow(
-                username: "Raj Surani",
-                isConnected: false
-            )
-            .padding(.horizontal)
-            .background(.ultraThinMaterial)
+    private func deleteChatUser(at offsets: IndexSet) {
+        offsets.forEach { index in
+            let user = chatListVM.users[index]
+
+            print("Deleting:", user.username)
+
+            // CoreData delete code here
         }
     }
+    
     var usersSection: some View {
-        LazyVStack {
-            ForEach(users as! [UserList]) { user in
-                userRow(user)
+        List {
+            if chatListVM.users.isEmpty {
+                Text("Search a user to chat with")
+            } else {
+                ForEach(chatListVM.users) { user in
+                    NavigationLink {
+                        ChatView(username: user.username)
+                    } label: {
+                        TitleRow(
+                            username: user.username,
+                            profile: user.profile,
+                            isConnected: false,
+                            unreadCount: user.unreadCount
+                        )
+                    }
+                    //                    Text(user.username)
+                    .swipeActions(edge: .trailing, allowsFullSwipe: true) {
+                        Button(role: .destructive) {
+                            print("Delete:", user.username)
+                        } label: {
+                            Label("Delete", systemImage: "trash")
+                        }
+                    }
+                    .swipeActions(edge: .trailing, allowsFullSwipe: true) {
+                        Button(role: .cancel) {
+                            
+                        } label: {
+                            Label("Archive", systemImage: "archivebox")
+                        }
+                    }
+                    .swipeActions(edge: .leading, allowsFullSwipe: true) {
+                        Button() {
+                            PersistantController.shared
+                                .updateUnreadCount(username: user.username, unreadCount: 1)
+                        } label: {
+                            Label("Mark as Read", systemImage: "checkmark")
+                        }
+                    }
+                    .swipeActions(edge: .leading, allowsFullSwipe: true) {
+                        Button() {
+                            
+                        } label: {
+                            Label("Mute", systemImage: "bell.slash")
+                        }
+                    }
+//                    .buttonStyle(.plain)
+                    .listRowBackground(Color.clear)
+                    .background(Color("Background"))
+                }
+//                .onDelete(perform: deleteChatUser)
             }
         }
-    }
-}
-// MARK: - User Row
-private extension DMContentView {
-    func userRow(_ user: UserList) -> some View {
-        NavigationLink {
-            ChatView(username: user.username)
-        } label: {
-            TitleRow(
-                username: user.username,
-                isConnected: true
+        .listStyle(.plain)
+//        .scrollContentBackground(.hidden)
+//        .background(Color.clear)
+        .listRowInsets(.none)
+        .listRowSeparator(.hidden)
+        .frame(height: 500)
+        .onAppear {
+            chatListVM.getAllUsers()
+            print(
+                "USERS ON COREDATA:",
+                chatListVM.users.count,
+                chatListVM.users
             )
-            .padding(.horizontal)
-            .background(.ultraThinMaterial)
         }
     }
 }
@@ -160,4 +208,5 @@ struct EmptyChatView: View {
 // MARK: - Preview
 #Preview {
     DMContentView()
+        .environmentObject(ChatListViewModel.shared)
 }

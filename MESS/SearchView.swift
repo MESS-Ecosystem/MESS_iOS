@@ -6,28 +6,24 @@
 //
 
 import SwiftUI
+import CoreData
+import Kingfisher
 
 struct SearchView: View {
+    @Environment(\.dismiss) private var dismiss
     struct userList: Decodable, Hashable {
         var username: String
         var displayName: String?
         var _id: String
         var email: String?
         var profile: String?
+        var unreadCount: Int32
     }
     @State private var searchInput: String = ""
-    @State private var searchedUser: [userList] = [userList(username: "userindb", _id: "6")]
+    @State private var searchedUser: [userList] = [userList(username: "userindb", _id: "6", unreadCount: 2)]
     @State private var didLoadImage = false
     @State private var isSearching: Bool = false
-    let imageTransaction: Transaction = {
-        var t = Transaction()
-        t.animation = .spring(
-            response: 0.55,
-            dampingFraction: 0.82,
-            blendDuration: 0.2
-        )
-        return t
-    }()
+
     var body: some View {
         VStack {
                 HStack {
@@ -45,31 +41,8 @@ struct SearchView: View {
                     ForEach(searchedUser, id: \.self) { user in
                         HStack {
                             if user.profile != nil {
-                                AsyncImage(
-                                    url: URL(string: user.profile ?? "placeholderProfile"),
-                                    transaction: imageTransaction
-                                ) { phase in
-                                    switch phase {
-                                    case .success(let image):
-                                        image.resizable()
-                                            .aspectRatio(contentMode: .fill)
-                                            .blur(radius: didLoadImage ? 0 : 20)
-                                            .scaleEffect(didLoadImage ? 1.0 : 1.15)
-                                            .frame(maxWidth: 60, maxHeight: 60)
-                                            .clipShape(.capsule)
-                                            .onAppear {
-                                                withAnimation(
-                                                    .spring(
-                                                        response: 1,
-                                                        dampingFraction: 0.8,
-                                                        blendDuration: 1
-                                                    )
-                                                ) {
-                                                    didLoadImage = true
-                                                }
-                                            }
-                                        
-                                    case .empty, .failure:
+                                KFImage(URL(string: user.profile ?? "placeholderProfile"))
+                                    .placeholder {
                                         ZStack {
                                             Image("placeholderProfile")
                                                 .resizable()
@@ -80,13 +53,24 @@ struct SearchView: View {
                                             ProgressView()
                                                 .tint(.white)
                                         }
-                                        
-                                    @unknown default:
-                                        EmptyView()
                                     }
-                                }
-                                .frame(maxWidth: 60)
-                                .clipShape(.capsule)
+                                    .onSuccess { _ in
+                                        withAnimation(
+                                            .spring(
+                                                response: 1,
+                                                dampingFraction: 0.8,
+                                                blendDuration: 1
+                                            )
+                                        ) {
+                                            didLoadImage = true
+                                        }
+                                    }
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fill)
+                                    .blur(radius: didLoadImage ? 0 : 20)
+                                    .scaleEffect(didLoadImage ? 1.0 : 1.15)
+                                    .frame(maxWidth: 60, maxHeight: 60)
+                                    .clipShape(.capsule)
                             }
                             else {
                                 Image("placeholderProfile")
@@ -100,10 +84,36 @@ struct SearchView: View {
                                 .font(.title2)
                                 .padding()
                             Spacer()
-                            Button(action: {
-                                // add user to local chat list
-                            }) {
-                                Text("Chat")
+                            NavigationLink {
+                                TitleRow(
+                                    username: user.username,
+                                    profile: user.profile ?? nil,
+                                    isConnected: true,
+                                    unreadCount: user.unreadCount
+                                )
+                                .padding(.horizontal)
+                                .background(.ultraThinMaterial)
+                            } label: {
+                                Button(
+                                    action: {
+                                        // add user to local chat list
+                                        ChatListViewModel.shared
+                                            .saveUser(
+                                                ChatViewModel.init(
+                                                    id: user._id,
+                                                    username: user.username,
+                                                    displayName: user.displayName,
+                                                    email: user.email,
+                                                    profile: user.profile,
+                                                    unreadCount: user.unreadCount
+                                                )
+                                            )
+                                        ChatListViewModel.shared.getAllUsers()
+                                        dismiss()
+                                    }) {
+                                        Text("Chat")
+                                            .foregroundStyle(Color("ThemedText"))
+                                    }
                             }
                         }
                         .padding()

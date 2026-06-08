@@ -6,27 +6,69 @@
 //
 
 import SwiftUI
+import Kingfisher
 
 struct MessageBubble: View {
     var message: Message
+    var profile: String?
     @State private var showTime = false
+    @State private var didLoadImage = false
+
     var body: some View {
         VStack (alignment: message.isSent ? .trailing : .leading) {
             HStack(alignment: .bottom){
                 if !message.isSent {
-                    Image("ProfileSamPorter")
-                        .resizable()
-                        .aspectRatio(contentMode: .fill)
-                        .frame(width: 30, height: 30)
-                        .clipShape(.capsule)
-                        .padding(.bottom, 5)
-                }
+                    if profile != nil {
+                        KFImage(URL(string: profile ?? "placeholderProfile"))
+                            .placeholder {
+                                ZStack {
+                                    Image("placeholderProfile")
+                                        .resizable()
+                                        .aspectRatio(contentMode: .fill)
+                                        .blur(radius: 20)
+                                        .frame(maxWidth: 30, maxHeight: 30)
+                                        .clipShape(.capsule)
+                                    ProgressView()
+                                        .tint(.white)
+                                }
+                            }
+                            .onSuccess { _ in
+                                withAnimation(
+                                    .spring(
+                                        response: 1,
+                                        dampingFraction: 0.8,
+                                        blendDuration: 1
+                                    )
+                                ) {
+                                    didLoadImage = true
+                                }
+                            }
+                            .resizable()
+                            .aspectRatio(contentMode: .fill)
+                            .blur(radius: didLoadImage ? 0 : 20)
+                            .scaleEffect(didLoadImage ? 1.0 : 1.15)
+                            .frame(maxWidth: 30, maxHeight: 30)
+                            .clipShape(.capsule)
+                            .padding(.bottom, 5)
+                    }
+                    else {
+                        Image("placeholderProfile")
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .clipShape(.capsule)
+                            .frame(maxWidth: 30, maxHeight: 30)
+                    }
+             }
                 Text(message.message)
                     .padding()
                     .background(Color(message.isSent ? "Theme" : "ThemedGray"))
                     .cornerRadius(30)
+                    .padding(message.isSent ? .leading : .trailing)
             }
-            .frame(maxWidth: 300, alignment: message.isSent ? .trailing : .leading)
+            .frame(
+                maxWidth: .infinity,
+                alignment: message.isSent ? .trailing : .leading
+            )
             .onTapGesture{
                 withAnimation{
                     showTime.toggle()

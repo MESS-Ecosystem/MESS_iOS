@@ -9,9 +9,19 @@ import SwiftUI
 
 @main
 struct MESSApp: App {
+    let persistence =
+    PersistantController.shared
+    
     var body: some Scene {
         WindowGroup {
             Landing()
+                .environmentObject(
+                    ChatListViewModel.shared
+                )
+                .environment(
+                    \.managedObjectContext,
+                     persistence.viewContext
+                )
         }
     }
 }

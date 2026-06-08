@@ -49,18 +49,18 @@ class BroadcastWebSocketManager: ObservableObject {
 //        var isSent: Bool
 //    }
     @Published var broadcastMessageArray: [MessageArray] = [
-        MessageArray(
-            id: "65487213",
-            message: "Hello iOS!!",
-            isSent: false,
-            displayName: "Sam"
-        ),
-        MessageArray(
-            id: "98741265",
-            message: "Hello webclient!!",
-            isSent: true,
-            displayName: ""
-        )
+//        MessageArray(
+//            id: "65487213",
+//            message: "Hello iOS!!",
+//            isSent: false,
+//            displayName: "Sam"
+//        ),
+//        MessageArray(
+//            id: "98741265",
+//            message: "Hello webclient!!",
+//            isSent: true,
+//            displayName: ""
+//        )
     ]
     init(socketUrl: String?, username: String, displayName: String? = "iOS") {
         if socketUrl != nil {
@@ -96,8 +96,10 @@ class BroadcastWebSocketManager: ObservableObject {
     }
 
     func send(message: String) {
-        let devinfo = UIDevice.current.name
-        socket.emit( "send-message", ["message": message, "displayName": self.displayName, "IsSent": false, "uid": devinfo ] )
+        if message != "" {
+            let devinfo = UIDevice.current.name
+            socket.emit( "send-message", ["message": message, "displayName": self.displayName, "IsSent": false, "uid": devinfo ] )
+        }
     }
 
     func setupListeners() {

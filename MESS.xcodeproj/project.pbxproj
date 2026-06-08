@@ -24,6 +24,7 @@
 		1781C9002FC965E700C63D47 /* JWTDecode in Frameworks */ = {isa = PBXBuildFile; productRef = 1781C8FF2FC965E700C63D47 /* JWTDecode */; };
 		1785FCAF2FA07BBB00F536E9 /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 1785FCAE2FA07BBB00F536E9 /* .gitignore */; };
 		1785FCB52FA0917100F536E9 /* TitleRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1785FCB42FA0917100F536E9 /* TitleRow.swift */; };
+		17893CBF2FD403F000F4A8E4 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 17893CBE2FD403F000F4A8E4 /* Kingfisher */; };
 		178CA9222FA373E000F4E529 /* MessageField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 178CA9212FA373E000F4E529 /* MessageField.swift */; };
 		178CA9242FA37A3500F4E529 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 178CA9232FA37A3500F4E529 /* Extensions.swift */; };
 		179160922FB100BF008526A6 /* BroadcastContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 179160912FB100BF008526A6 /* BroadcastContentView.swift */; };
@@ -33,10 +34,13 @@
 		17B50F372FB26F8300F499BF /* MessageArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17B50F362FB26F8300F499BF /* MessageArray.swift */; };
 		17B50F392FB2754C00F499BF /* BroadcastMessageBubble.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17B50F382FB2754B00F499BF /* BroadcastMessageBubble.swift */; };
 		17BAD3A02FBB682700BAABD1 /* Auth.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 17BAD39E2FBB682700BAABD1 /* Auth.xcdatamodeld */; };
+		17BD6A352FCF237C00C15480 /* MESS.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 17BD6A332FCF237C00C15480 /* MESS.xcdatamodeld */; };
+		17BD6A372FCF262300C15480 /* PersistentController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17BD6A362FCF262300C15480 /* PersistentController.swift */; };
 		17D0C6C72FB9B42C00A4C477 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17D0C6C62FB9B42B00A4C477 /* OnboardingView.swift */; };
 		17D753E92FAD020100942CD8 /* DMContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17D753E82FAD020100942CD8 /* DMContentView.swift */; };
 		17D7B1FD2FCDF651007C47B2 /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17D7B1FC2FCDF651007C47B2 /* SearchView.swift */; };
 		17D7B1FF2FCDF8F7007C47B2 /* API.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17D7B1FE2FCDF8F7007C47B2 /* API.swift */; };
+		17E274952FCFEC2200A8EE65 /* ChatListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17E274942FCFEC2200A8EE65 /* ChatListViewModel.swift */; };
 		17ECC4622FBF019A009FBE6A /* AccountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17ECC4612FBF019A009FBE6A /* AccountView.swift */; };
 		17ECC4642FBF03C6009FBE6A /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17ECC4632FBF03C6009FBE6A /* SettingsView.swift */; };
 		17FA527D2FB0D87200A25CCC /* DMSocketManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17FA527C2FB0D87200A25CCC /* DMSocketManager.swift */; };
@@ -87,11 +91,13 @@
 		17B50F362FB26F8300F499BF /* MessageArray.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageArray.swift; sourceTree = "<group>"; };
 		17B50F382FB2754B00F499BF /* BroadcastMessageBubble.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BroadcastMessageBubble.swift; sourceTree = "<group>"; };
 		17BAD39F2FBB682700BAABD1 /* Auth.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Auth.xcdatamodel; sourceTree = "<group>"; };
-		17CF35BE2FCC25B500A4001F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		17BD6A342FCF237C00C15480 /* MESS.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = MESS.xcdatamodel; sourceTree = "<group>"; };
+		17BD6A362FCF262300C15480 /* PersistentController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistentController.swift; sourceTree = "<group>"; };
 		17D0C6C62FB9B42B00A4C477 /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
 		17D753E82FAD020100942CD8 /* DMContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DMContentView.swift; sourceTree = "<group>"; };
 		17D7B1FC2FCDF651007C47B2 /* SearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchView.swift; sourceTree = "<group>"; };
 		17D7B1FE2FCDF8F7007C47B2 /* API.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = API.swift; sourceTree = "<group>"; };
+		17E274942FCFEC2200A8EE65 /* ChatListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatListViewModel.swift; sourceTree = "<group>"; };
 		17ECC4612FBF019A009FBE6A /* AccountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountView.swift; sourceTree = "<group>"; };
 		17ECC4632FBF03C6009FBE6A /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		17FA527C2FB0D87200A25CCC /* DMSocketManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DMSocketManager.swift; sourceTree = "<group>"; };
@@ -102,6 +108,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				17893CBF2FD403F000F4A8E4 /* Kingfisher in Frameworks */,
 				1781C9002FC965E700C63D47 /* JWTDecode in Frameworks */,
 				173F96C42FADC30F00583652 /* SocketIO in Frameworks */,
 			);
@@ -129,6 +136,7 @@
 			children = (
 				17D7B1FE2FCDF8F7007C47B2 /* API.swift */,
 				1736DB202FBC6D8000634BD6 /* KeychainManager.swift */,
+				17BD6A362FCF262300C15480 /* PersistentController.swift */,
 			);
 			path = Managers;
 			sourceTree = "<group>";
@@ -166,13 +174,13 @@
 		176AF7E12F9FDF1F00F1999D /* MESS */ = {
 			isa = PBXGroup;
 			children = (
-				17CF35BE2FCC25B500A4001F /* Info.plist */,
 				1736DB1F2FBC6D6700634BD6 /* Managers */,
 				176AF7E22F9FDF1F00F1999D /* MESSApp.swift */,
 				175EB6D52FAF342C00D6E78E /* Landing.swift */,
 				17D0C6C62FB9B42B00A4C477 /* OnboardingView.swift */,
 				17D753E82FAD020100942CD8 /* DMContentView.swift */,
 				17D7B1FC2FCDF651007C47B2 /* SearchView.swift */,
+				17BD6A332FCF237C00C15480 /* MESS.xcdatamodeld */,
 				179160912FB100BF008526A6 /* BroadcastContentView.swift */,
 				176AF7E42F9FDF1F00F1999D /* DMChatView.swift */,
 				179160932FB101F3008526A6 /* BroadcastChatView.swift */,
@@ -188,6 +196,7 @@
 				173EDBA12FB057BE00CD93D4 /* SheetExtension.swift */,
 				17BAD39E2FBB682700BAABD1 /* Auth.xcdatamodeld */,
 				17A7423C2FCADB6C00CEED0D /* LaunchScreen.storyboard */,
+				17E274942FCFEC2200A8EE65 /* ChatListViewModel.swift */,
 			);
 			path = MESS;
 			sourceTree = "<group>";
@@ -240,6 +249,7 @@
 			packageProductDependencies = (
 				173F96C32FADC30F00583652 /* SocketIO */,
 				1781C8FF2FC965E700C63D47 /* JWTDecode */,
+				17893CBE2FD403F000F4A8E4 /* Kingfisher */,
 			);
 			productName = MESS;
 			productReference = 176AF7DF2F9FDF1F00F1999D /* MESS.app */;
@@ -319,6 +329,7 @@
 			packageReferences = (
 				173F96C22FADC30F00583652 /* XCRemoteSwiftPackageReference "socket" */,
 				1781C8FE2FC965E700C63D47 /* XCRemoteSwiftPackageReference "JWTDecode" */,
+				17893CBD2FD403F000F4A8E4 /* XCRemoteSwiftPackageReference "kingfisher" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 176AF7E02F9FDF1F00F1999D /* Products */;
@@ -373,6 +384,7 @@
 				178CA9242FA37A3500F4E529 /* Extensions.swift in Sources */,
 				175EB6D62FAF342C00D6E78E /* Landing.swift in Sources */,
 				17BAD3A02FBB682700BAABD1 /* Auth.xcdatamodeld in Sources */,
+				17BD6A372FCF262300C15480 /* PersistentController.swift in Sources */,
 				176C60952FAB37FB000CAF5F /* BroadcastSocketManager.swift in Sources */,
 				178CA9222FA373E000F4E529 /* MessageField.swift in Sources */,
 				17D753E92FAD020100942CD8 /* DMContentView.swift in Sources */,
@@ -381,6 +393,7 @@
 				177122362FC98C7800FC5947 /* ImagePicker.swift in Sources */,
 				17B50F392FB2754C00F499BF /* BroadcastMessageBubble.swift in Sources */,
 				175D1F8B2FA367440054C52E /* Message.swift in Sources */,
+				17E274952FCFEC2200A8EE65 /* ChatListViewModel.swift in Sources */,
 				179160922FB100BF008526A6 /* BroadcastContentView.swift in Sources */,
 				176AF7E32F9FDF1F00F1999D /* MESSApp.swift in Sources */,
 				17D7B1FF2FCDF8F7007C47B2 /* API.swift in Sources */,
@@ -389,6 +402,7 @@
 				17AE53412FADE31500E592D0 /* MessageTitleRow.swift in Sources */,
 				1736DB212FBC6D8400634BD6 /* KeychainManager.swift in Sources */,
 				17ECC4642FBF03C6009FBE6A /* SettingsView.swift in Sources */,
+				17BD6A352FCF237C00C15480 /* MESS.xcdatamodeld in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -754,6 +768,14 @@
 				minimumVersion = 4.0.0;
 			};
 		};
+		17893CBD2FD403F000F4A8E4 /* XCRemoteSwiftPackageReference "kingfisher" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/onevcat/kingfisher";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 8.9.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -767,6 +789,11 @@
 			package = 1781C8FE2FC965E700C63D47 /* XCRemoteSwiftPackageReference "JWTDecode" */;
 			productName = JWTDecode;
 		};
+		17893CBE2FD403F000F4A8E4 /* Kingfisher */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 17893CBD2FD403F000F4A8E4 /* XCRemoteSwiftPackageReference "kingfisher" */;
+			productName = Kingfisher;
+		};
 /* End XCSwiftPackageProductDependency section */
 
 /* Begin XCVersionGroup section */
@@ -777,6 +804,16 @@
 			);
 			currentVersion = 17BAD39F2FBB682700BAABD1 /* Auth.xcdatamodel */;
 			path = Auth.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+		17BD6A332FCF237C00C15480 /* MESS.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				17BD6A342FCF237C00C15480 /* MESS.xcdatamodel */,
+			);
+			currentVersion = 17BD6A342FCF237C00C15480 /* MESS.xcdatamodel */;
+			path = MESS.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;
 		};
